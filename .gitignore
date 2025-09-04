@@ -183,3 +183,4 @@ logs/
 # Compiled CSS/JS (if using build tools)
 /static/css/compiled/
 /static/js/compiled/ 
+.vercel

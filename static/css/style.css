@@ -997,6 +997,26 @@ body {
     padding: 1rem 1.5rem 1.5rem;
 }
 
+.sidebar-card ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.sidebar-card li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    color: var(--dark-color);
+}
+
+.sidebar-card li i {
+    font-size: 1.2rem;
+    margin-right: 0.75rem;
+    width: 20px; /* Ensures consistent alignment */
+    text-align: center;
+}
+
 /* ===== EMPTY STATES ===== */
 
 .empty-state {
@@ -1020,3 +1040,9 @@ body {
     margin-bottom: 2rem;
     font-size: 1.1rem;
 } 
+
+.card-body ul.list-unstyled li {
+    color: var(--dark-color) !important;   /* #343a40 in light mode, #f8f9fa in dark mode */
+}
+
+/* If you want the same for the sidebar list as well, drop the .card-body prefix */ 

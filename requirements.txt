@@ -12,11 +12,10 @@ python-slugify==8.0.1
 bleach==6.1.0
 python-dotenv==1.0.0
 
-# Production dependencies
-gunicorn==21.2.0
-psycopg2-binary
-Flask-Moment
+# Production dependencies for Vercel
+psycopg2-binary==2.9.10
+Flask-Moment==1.0.6
 
 # Optional production dependencies
 # redis==5.0.1
-# celery==5.3.4 
+# celery==5.3.4
