@@ -7,7 +7,8 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-3.0+-green.svg?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3+-purple.svg?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com)
-[![SQLite](https://img.shields.io/badge/SQLite-3.0+-orange.svg?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-blue.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org)
+[![Vercel](https://img.shields.io/badge/Vercel-Deployed-black.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 [![GitHub stars](https://img.shields.io/github/stars/Dhritimanmitraa/flask-full-stack-app.svg?style=social&label=Star)](https://github.com/Dhritimanmitraa/flask-full-stack-app)
@@ -16,7 +17,10 @@
 
 *A comprehensive, production-ready web application built with Flask, featuring cutting-edge UI/UX design, advanced functionality, and industry best practices.*
 
-[✨ **Live Demo**](https://flask-full-stack-app.up.railway.app) • [📚 **Documentation**](./docs) • [🚀 **Quick Start**](#-getting-started) • [🎨 **Screenshots**](#-screenshots)
+> **🎉 NEW: Successfully migrated from Render to Vercel!** 
+> Now running on serverless architecture with PostgreSQL database and global CDN.
+
+[✨ **Live Demo**](https://flask-blog-hjo71pgti-dhritiman-mitras-projects.vercel.app) • [📚 **Documentation**](./VERCEL_DEPLOYMENT.md) • [🚀 **Quick Start**](#-getting-started) • [🎨 **Screenshots**](#-screenshots)
 
 </div>
 
@@ -248,7 +252,13 @@ python quick_deploy.py
 
 ### **☁️ Cloud Deployment (Free Platforms)**
 
-**🟡 Railway (Recommended)**
+**⚡ Vercel (Currently Deployed!)**
+✅ **Live at**: https://flask-blog-hjo71pgti-dhritiman-mitras-projects.vercel.app
+- Serverless deployment with global CDN
+- PostgreSQL database (Neon)
+- Automatic HTTPS and scaling
+
+**🟡 Railway**
 1. Go to [railway.app](https://railway.app)
 2. Connect GitHub and deploy
 3. Live in 2 minutes!
@@ -263,11 +273,7 @@ git push heroku main
 1. Go to [render.com](https://render.com)
 2. Connect repo and deploy
 
-**🟢 PythonAnywhere**
-1. Upload files to [pythonanywhere.com](https://pythonanywhere.com)
-2. Configure Flask app
-
-📖 **See `DEPLOYMENT.md` for detailed instructions**
+📖 **See `VERCEL_DEPLOYMENT.md` for detailed Vercel instructions**
 
 ## 📋 **API Endpoints**
 
@@ -355,8 +361,13 @@ DEBUG=True  # Set to False in production
 ```
 
 ### **Database Setup**
-The application automatically:
-- Creates all necessary tables on first run
+**For Vercel Deployment:**
+- PostgreSQL database hosted on Neon
+- Tables created via `init_database.py` script
+- Admin user: `admin` / `admin123`
+
+**For Local Development:**
+- SQLite database created automatically
 - Seeds default categories for immediate use
 - Creates an admin user for management access
 
