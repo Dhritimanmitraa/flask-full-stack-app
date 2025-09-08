@@ -2,6 +2,9 @@
 command = "pip install -r requirements.txt"
 functions = "netlify/functions"
 
+[build.environment]
+PYTHON_COMPILE = "false"
+
 [[redirects]]
 from = "/*"
 to = "/.netlify/functions/flask_app"
