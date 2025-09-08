@@ -1,0 +1,6 @@
+[[build.environment]]
+python_version = "3.11.7"
+
+[build]
+command = "pip install -r requirements.txt && python -m flask run"
+publish = "static"
