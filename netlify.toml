@@ -1,5 +1,6 @@
 [build]
 python_version = "3.11.7"
+command = "pip install -r requirements.txt"
 functions = "netlify/functions"
 
 [[redirects]]
