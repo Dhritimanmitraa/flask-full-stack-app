@@ -2,5 +2,9 @@
 python_version = "3.11.7"
 
 [build]
-command = "pip install -r requirements.txt && python -m flask run"
-publish = "static"
+functions = "netlify/functions"
+
+[[redirects]]
+from = "/*"
+to = "/.netlify/functions/flask_app"
+status = 200
