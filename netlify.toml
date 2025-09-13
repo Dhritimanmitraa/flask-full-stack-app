@@ -6,7 +6,7 @@ functions = "netlify/functions"
 PYTHON_COMPILE = "false"
 AWS_PYTHON_VERSION = "3.10"
 PYTHON_VERSION = "3.10"
-MISE_PYTHON_COMPILE = "false"
+PYENV_VERSION = "3.10"
 
 [[redirects]]
 from = "/*"
