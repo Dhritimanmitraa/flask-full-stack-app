@@ -4,8 +4,9 @@ functions = "netlify/functions"
 
 [build.environment]
 PYTHON_COMPILE = "false"
-AWS_PYTHON_VERSION = "3.9"
-PYTHON_VERSION = "3.9"
+AWS_PYTHON_VERSION = "3.10"
+PYTHON_VERSION = "3.10"
+MISE_PYTHON_COMPILE = "false"
 
 [[redirects]]
 from = "/*"
