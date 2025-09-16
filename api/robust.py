@@ -40,27 +40,27 @@ SUCCESS_TEMPLATE = '''
                 
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
-                        <h4 class="card-title mb-3">✅ Migration Complete!</h4>
+                        <h4 class="card-title mb-3"> Migration Complete!</h4>
                         <p class="card-text">
                             Your Flask blog has been successfully deployed on Vercel with:
                         </p>
                         <ul class="list-group list-group-flush mb-4">
-                            <li class="list-group-item">✅ Vercel serverless deployment</li>
-                            <li class="list-group-item">✅ PostgreSQL database connected</li>
-                            <li class="list-group-item">✅ Database tables created</li>
-                            <li class="list-group-item">✅ Admin user configured</li>
-                            <li class="list-group-item">✅ Sample content ready</li>
+                            <li class="list-group-item"> Vercel serverless deployment</li>
+                            <li class="list-group-item"> PostgreSQL database connected</li>
+                            <li class="list-group-item"> Database tables created</li>
+                            <li class="list-group-item"> Admin user configured</li>
+                            <li class="list-group-item"> Sample content ready</li>
                         </ul>
                         
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card bg-light">
                                     <div class="card-body">
-                                        <h6 class="card-title">🔐 Admin Login</h6>
+                                        <h6 class="card-title"> Admin Login</h6>
                                         <p class="card-text small">
                                             <strong>Username:</strong> admin<br>
                                             <strong>Password:</strong> admin123<br>
-                                            <small class="text-danger">⚠️ Change password after first login!</small>
+                                            <small class="text-danger"> Change password after first login!</small>
                                         </p>
                                     </div>
                                 </div>
@@ -68,7 +68,7 @@ SUCCESS_TEMPLATE = '''
                             <div class="col-md-6">
                                 <div class="card bg-light">
                                     <div class="card-body">
-                                        <h6 class="card-title">📊 Database Status</h6>
+                                        <h6 class="card-title"> Database Status</h6>
                                         <p class="card-text small">
                                             <span class="badge bg-success">Connected</span><br>
                                             <small>Neon PostgreSQL</small>
