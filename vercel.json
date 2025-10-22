@@ -5,9 +5,15 @@
   ],
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
+    { "src": "/uploads/(.*)", "dest": "/uploads/$1" },
     { "src": "/(.*)", "dest": "/api/index.py" }
   ],
   "env": {
     "PYTHONUNBUFFERED": "1"
+  },
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 30
+    }
   }
 }

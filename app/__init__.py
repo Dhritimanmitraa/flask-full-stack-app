@@ -41,14 +41,19 @@ def create_app():
         'pool_recycle': 300,
     }
     
-    # Create upload directories if they don't exist
-    upload_folders = [
-        app.config['UPLOAD_FOLDER'],
-        app.config['UPLOAD_FOLDER_IMAGES'],
-        app.config['UPLOAD_FOLDER_VIDEOS']
-    ]
-    for folder in upload_folders:
-        os.makedirs(folder, exist_ok=True)
+    # Create upload directories if they don't exist (skip in serverless environments)
+    try:
+        upload_folders = [
+            app.config['UPLOAD_FOLDER'],
+            app.config['UPLOAD_FOLDER_IMAGES'],
+            app.config['UPLOAD_FOLDER_VIDEOS']
+        ]
+        for folder in upload_folders:
+            # Only create directories if not in a read-only serverless environment
+            if not '/var/task' in str(folder) and not '/tmp' in str(folder):
+                os.makedirs(folder, exist_ok=True)
+    except Exception as e:
+        print(f"Note: Could not create upload directories (serverless mode): {e}")
     
     db.init_app(app)
         
