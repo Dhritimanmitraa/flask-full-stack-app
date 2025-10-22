@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, session, abort
+from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, session, abort, current_app, send_from_directory
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import datetime
 from app import db
@@ -6,11 +6,59 @@ from app.models import User, Post, Category, Comment
 from app.forms import (LoginForm, RegistrationForm, PostForm, SearchForm, 
                       UserProfileForm, CommentForm, CategoryForm, ChangePasswordForm)
 from urllib.parse import urlparse
+from werkzeug.utils import secure_filename
+import os
+import uuid
 
 main_bp = Blueprint('main', __name__)
 auth_bp = Blueprint('auth', __name__)
 api_bp = Blueprint('api', __name__)
 admin_bp = Blueprint('admin', __name__)
+
+def allowed_file(filename, allowed_extensions):
+    """Check if file extension is allowed"""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
+
+def save_uploaded_file(file, folder_type='images'):
+    """Save uploaded file and return the filename"""
+    if file and file.filename:
+        # Get file extension
+        file_ext = file.filename.rsplit('.', 1)[1].lower()
+        
+        # Generate unique filename
+        unique_filename = f"{uuid.uuid4().hex}.{file_ext}"
+        
+        # Determine upload folder
+        if folder_type == 'images':
+            upload_folder = current_app.config['UPLOAD_FOLDER_IMAGES']
+        elif folder_type == 'videos':
+            upload_folder = current_app.config['UPLOAD_FOLDER_VIDEOS']
+        else:
+            upload_folder = current_app.config['UPLOAD_FOLDER']
+        
+        # Save file
+        file_path = os.path.join(upload_folder, unique_filename)
+        file.save(file_path)
+        
+        return unique_filename
+    return None
+
+def delete_uploaded_file(filename, folder_type='images'):
+    """Delete uploaded file"""
+    if filename:
+        if folder_type == 'images':
+            upload_folder = current_app.config['UPLOAD_FOLDER_IMAGES']
+        elif folder_type == 'videos':
+            upload_folder = current_app.config['UPLOAD_FOLDER_VIDEOS']
+        else:
+            upload_folder = current_app.config['UPLOAD_FOLDER']
+        
+        file_path = os.path.join(upload_folder, filename)
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except Exception as e:
+                print(f"Error deleting file {file_path}: {e}")
 
 @main_bp.route('/')
 @main_bp.route('/index')
@@ -66,6 +114,16 @@ def create_post():
     """Enhanced post creation with categories and SEO"""
     form = PostForm()
     if form.validate_on_submit():
+        # Handle image upload
+        image_filename = None
+        if form.image.data:
+            image_filename = save_uploaded_file(form.image.data, 'images')
+        
+        # Handle video upload
+        video_filename = None
+        if form.video.data:
+            video_filename = save_uploaded_file(form.video.data, 'videos')
+        
         post = Post(
             title=form.title.data,
             content=form.content.data,
@@ -76,7 +134,9 @@ def create_post():
             is_featured=form.is_featured.data and current_user.is_admin,
             allow_comments=form.allow_comments.data,
             user_id=current_user.id,
-            category_id=form.category_id.data if form.category_id.data else None
+            category_id=form.category_id.data if form.category_id.data else None,
+            image_filename=image_filename,
+            video_filename=video_filename
         )
         
         post.slug = post.generate_slug()
@@ -100,6 +160,22 @@ def edit_post(id):
     form = PostForm()
     
     if form.validate_on_submit():
+        # Handle image upload/replacement
+        if form.image.data:
+            # Delete old image if exists
+            if post.image_filename:
+                delete_uploaded_file(post.image_filename, 'images')
+            # Save new image
+            post.image_filename = save_uploaded_file(form.image.data, 'images')
+        
+        # Handle video upload/replacement
+        if form.video.data:
+            # Delete old video if exists
+            if post.video_filename:
+                delete_uploaded_file(post.video_filename, 'videos')
+            # Save new video
+            post.video_filename = save_uploaded_file(form.video.data, 'videos')
+        
         post.title = form.title.data
         post.content = form.content.data
         post.excerpt = form.excerpt.data
@@ -140,6 +216,13 @@ def delete_post(id):
     post = Post.query.get_or_404(id)
     if post.user_id != current_user.id and not current_user.is_admin:
         abort(403)
+    
+    # Delete associated media files
+    if post.image_filename:
+        delete_uploaded_file(post.image_filename, 'images')
+    if post.video_filename:
+        delete_uploaded_file(post.video_filename, 'videos')
+    
     db.session.delete(post)
     db.session.commit()
     flash('Your post has been deleted!', 'success')
@@ -458,6 +541,19 @@ def create_category():
         return redirect(url_for('admin.manage_categories'))
     
     return render_template('admin/category_form.html', title='Create Category', form=form)
+
+@main_bp.route('/uploads/<folder>/<filename>')
+def serve_upload(folder, filename):
+    """Serve uploaded files"""
+    try:
+        if folder == 'images':
+            return send_from_directory(current_app.config['UPLOAD_FOLDER_IMAGES'], filename)
+        elif folder == 'videos':
+            return send_from_directory(current_app.config['UPLOAD_FOLDER_VIDEOS'], filename)
+        else:
+            abort(404)
+    except Exception as e:
+        abort(404)
 
 @main_bp.app_errorhandler(404)
 def not_found_error(error):

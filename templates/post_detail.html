@@ -37,6 +37,25 @@
                     </div>
                 </div>
 
+                <!-- Post Media -->
+                {% if post.image_filename %}
+                <div class="post-media mb-4">
+                    <img src="{{ url_for('main.serve_upload', folder='images', filename=post.image_filename) }}" 
+                         alt="{{ post.title }}" 
+                         class="img-fluid rounded shadow-sm"
+                         style="max-height: 500px; width: 100%; object-fit: cover;">
+                </div>
+                {% endif %}
+                
+                {% if post.video_filename %}
+                <div class="post-media mb-4">
+                    <video controls class="w-100 rounded shadow-sm" style="max-height: 500px;">
+                        <source src="{{ url_for('main.serve_upload', folder='videos', filename=post.video_filename) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                {% endif %}
+
                 <!-- Post Content -->
                 <div class="post-content">
                     <div class="mt-4">

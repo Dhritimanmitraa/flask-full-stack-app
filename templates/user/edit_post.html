@@ -11,7 +11,7 @@
                 <p class="mb-0 text-muted">Last updated: {{ post.updated_at.strftime('%B %d, %Y at %I:%M %p') if post.updated_at else post.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
             </div>
             <div class="card-body">
-                <form method="POST" id="postForm">
+                <form method="POST" id="postForm" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
                     
                     <!-- Title Field -->
@@ -39,6 +39,63 @@
                         {% endif %}
                         <div class="form-text">
                             <small class="text-muted">Share your thoughts, ideas, or stories with the community</small>
+                        </div>
+                    </div>
+
+                    <!-- Media Upload Fields -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.image.label(class="form-label") }}
+                                {{ form.image(class="form-control") }}
+                                {% if form.image.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.image.errors[0] }}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    <small class="text-muted">Upload a featured image (JPG, PNG, GIF, WebP)</small>
+                                </div>
+                                {% if post.image_filename %}
+                                <div class="mt-2">
+                                    <p class="small text-muted mb-1">Current image:</p>
+                                    <img src="{{ url_for('main.serve_upload', folder='images', filename=post.image_filename) }}" 
+                                         alt="Current image" 
+                                         class="img-thumbnail" 
+                                         style="max-width: 200px; max-height: 200px;">
+                                </div>
+                                {% endif %}
+                                <div id="imagePreview" class="mt-2" style="display: none;">
+                                    <p class="small text-success mb-1">New image preview:</p>
+                                    <img id="imagePreviewImg" src="" alt="Preview" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.video.label(class="form-label") }}
+                                {{ form.video(class="form-control") }}
+                                {% if form.video.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.video.errors[0] }}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    <small class="text-muted">Upload a featured video (MP4, MOV, AVI, WebM)</small>
+                                </div>
+                                {% if post.video_filename %}
+                                <div class="mt-2">
+                                    <p class="small text-muted mb-1">Current video:</p>
+                                    <video controls class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                        <source src="{{ url_for('main.serve_upload', folder='videos', filename=post.video_filename) }}" type="video/mp4">
+                                    </video>
+                                </div>
+                                {% endif %}
+                                <div id="videoPreview" class="mt-2" style="display: none;">
+                                    <p class="small text-success mb-1">New video preview:</p>
+                                    <video id="videoPreviewVideo" controls class="img-thumbnail" style="max-width: 200px; max-height: 200px;"></video>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -264,6 +321,36 @@ $(document).ready(function() {
     // Mark form as submitted
     $('#postForm').on('submit', function() {
         $(this).data('submitted', true);
+    });
+    
+    // Image preview functionality
+    $('#image').on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('#imagePreviewImg').attr('src', e.target.result);
+                $('#imagePreview').show();
+            };
+            reader.readAsDataURL(file);
+        } else {
+            $('#imagePreview').hide();
+        }
+    });
+    
+    // Video preview functionality
+    $('#video').on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('#videoPreviewVideo').attr('src', e.target.result);
+                $('#videoPreview').show();
+            };
+            reader.readAsDataURL(file);
+        } else {
+            $('#videoPreview').hide();
+        }
     });
     
     console.log('Edit post form initialized');

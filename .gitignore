@@ -16,6 +16,9 @@ instance/
 *.db
 *.sqlite3
 
+# Uploaded media files
+static/uploads/
+
 # Logs
 *.log
 

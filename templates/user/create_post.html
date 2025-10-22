@@ -10,7 +10,7 @@
                 </h3>
             </div>
             <div class="card-body">
-                <form method="POST" id="postForm">
+                <form method="POST" id="postForm" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
                     
                     <!-- Title Field -->
@@ -38,6 +38,44 @@
                         {% endif %}
                         <div class="form-text">
                             <small class="text-muted">Share your thoughts, ideas, or stories with the community</small>
+                        </div>
+                    </div>
+
+                    <!-- Media Upload Fields -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.image.label(class="form-label") }}
+                                {{ form.image(class="form-control") }}
+                                {% if form.image.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.image.errors[0] }}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    <small class="text-muted">Upload a featured image (JPG, PNG, GIF, WebP)</small>
+                                </div>
+                                <div id="imagePreview" class="mt-2" style="display: none;">
+                                    <img id="imagePreviewImg" src="" alt="Preview" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.video.label(class="form-label") }}
+                                {{ form.video(class="form-control") }}
+                                {% if form.video.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.video.errors[0] }}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    <small class="text-muted">Upload a featured video (MP4, MOV, AVI, WebM)</small>
+                                </div>
+                                <div id="videoPreview" class="mt-2" style="display: none;">
+                                    <video id="videoPreviewVideo" controls class="img-thumbnail" style="max-width: 200px; max-height: 200px;"></video>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -282,6 +320,36 @@ $(document).ready(function() {
     
     // Auto-focus on title field
     $('#title').focus();
+    
+    // Image preview functionality
+    $('#image').on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('#imagePreviewImg').attr('src', e.target.result);
+                $('#imagePreview').show();
+            };
+            reader.readAsDataURL(file);
+        } else {
+            $('#imagePreview').hide();
+        }
+    });
+    
+    // Video preview functionality
+    $('#video').on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('#videoPreviewVideo').attr('src', e.target.result);
+                $('#videoPreview').show();
+            };
+            reader.readAsDataURL(file);
+        } else {
+            $('#videoPreview').hide();
+        }
+    });
     
     console.log('Create post form initialized');
 });

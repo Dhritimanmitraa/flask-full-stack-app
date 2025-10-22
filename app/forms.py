@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, TextAreaField, BooleanField, SubmitField, SelectField, URLField, IntegerField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError, Optional, URL
 from app.models import User, Category
@@ -93,6 +94,17 @@ class PostForm(FlaskForm):
         Optional(),
         Length(max=255, message='Meta keywords should not exceed 255 characters')
     ], render_kw={'placeholder': 'SEO keywords separated by commas (optional)', 'class': 'form-control'})
+    
+    # Media upload fields
+    image = FileField('Featured Image', validators=[
+        Optional(),
+        FileAllowed(['jpg', 'jpeg', 'png', 'gif', 'webp'], 'Only image files are allowed!')
+    ], render_kw={'class': 'form-control', 'accept': 'image/*'})
+    
+    video = FileField('Featured Video', validators=[
+        Optional(),
+        FileAllowed(['mp4', 'mov', 'avi', 'webm', 'mkv'], 'Only video files are allowed!')
+    ], render_kw={'class': 'form-control', 'accept': 'video/*'})
     
     is_published = BooleanField('Publish Post', default=True, render_kw={'class': 'form-check-input'})
     is_featured = BooleanField('Featured Post', default=False, render_kw={'class': 'form-check-input'})

@@ -67,6 +67,15 @@
                             {% endif %}
                         </div>
                         
+                        {% if post.image_filename %}
+                        <div class="mb-3">
+                            <img src="{{ url_for('main.serve_upload', folder='images', filename=post.image_filename) }}" 
+                                 alt="{{ post.title }}" 
+                                 class="img-fluid rounded post-thumbnail"
+                                 style="max-height: 200px; width: 100%; object-fit: cover;">
+                        </div>
+                        {% endif %}
+                        
                         <p class="text-muted mb-3">
                             {% set content_preview = post.content[:250] + '...' if post.content|length > 250 else post.content %}
                             {{ content_preview }}

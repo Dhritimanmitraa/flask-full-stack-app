@@ -30,10 +30,25 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['WTF_CSRF_TIME_LIMIT'] = None
     
+    # File upload configuration
+    app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB max file size
+    app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'static', 'uploads')
+    app.config['UPLOAD_FOLDER_IMAGES'] = os.path.join(app.config['UPLOAD_FOLDER'], 'images')
+    app.config['UPLOAD_FOLDER_VIDEOS'] = os.path.join(app.config['UPLOAD_FOLDER'], 'videos')
+    
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
         'pool_pre_ping': True,
         'pool_recycle': 300,
     }
+    
+    # Create upload directories if they don't exist
+    upload_folders = [
+        app.config['UPLOAD_FOLDER'],
+        app.config['UPLOAD_FOLDER_IMAGES'],
+        app.config['UPLOAD_FOLDER_VIDEOS']
+    ]
+    for folder in upload_folders:
+        os.makedirs(folder, exist_ok=True)
     
     db.init_app(app)
         
