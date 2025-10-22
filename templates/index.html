@@ -98,7 +98,7 @@
             {% if posts.items %}
         <div class="posts-grid">
                 {% for post in posts.items %}
-                <div class="post-card-modern animate-fade-in" style="animation-delay: {{ loop.index * 0.1 }}s">
+                <div class="post-card-modern animate-fade-in" data-animation-delay="{{ loop.index * 0.1 }}">
                     {% if post.image_filename %}
                     <div class="post-card-image">
                         <img src="{{ url_for('main.serve_upload', folder='images', filename=post.image_filename) }}" 
@@ -906,4 +906,15 @@
     }
 }
 </style>
+
+<script>
+// Set animation delay from data attribute
+document.addEventListener('DOMContentLoaded', function() {
+    const postCards = document.querySelectorAll('.post-card-modern[data-animation-delay]');
+    postCards.forEach(function(card) {
+        const delay = card.getAttribute('data-animation-delay');
+        card.style.animationDelay = delay + 's';
+    });
+});
+</script>
 {% endblock %}
