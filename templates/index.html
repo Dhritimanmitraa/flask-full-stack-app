@@ -1,119 +1,99 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <!-- Hero Section -->
-    <div class="text-center py-5 mb-5 bg-light rounded-3">
-        <h1 class="display-4 fw-bold mb-4">Welcome to blogpost</h1>
-        <p class="lead text-muted">The modern platform for sharing your thoughts, ideas, and stories with the world.</p>
+<div class="container-fluid px-4 mt-5 pt-4">
+    <div class="hero-section text-center animate-fade-in" style="position: relative; z-index: 2;">
+        <h1 class="hero-title">Welcome to ProApp</h1>
+        <p class="hero-subtitle">The modern platform for sharing your thoughts, ideas, and stories with the world</p>
         {% if not current_user.is_authenticated %}
-            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Get Started</a>
-            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">Sign In</a>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{{ url_for('auth.register') }}" class="btn btn-gradient glow-effect">
+                    <i class="bi bi-rocket-takeoff"></i> Get Started
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-gradient">
+                    <i class="bi bi-box-arrow-in-right"></i> Sign In
+                </a>
+            </div>
         {% else %}
-            <a href="{{ url_for('main.create_post') }}" class="btn btn-primary btn-lg">Create Post</a>
-            <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-primary btn-lg">Dashboard</a>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{{ url_for('main.create_post') }}" class="btn btn-gradient glow-effect">
+                    <i class="bi bi-plus-circle"></i> Create Post
+                </a>
+                <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-gradient">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </div>
         {% endif %}
     </div>
 
-    <div class="row">
-        <!-- Main Content -->
-        <div class="col-lg-8 mx-auto">
-            <div class="card shadow-sm">
-                <div class="card-body p-4">
-                    <h4 class="card-title mb-3"><i class="bi bi-info-circle text-primary"></i> About blogpost</h4>
-                    <p class="card-text">
-                        This is a dynamic and feature-rich blogging platform built with Flask and Python. 
-                        It serves as a comprehensive example of a full-stack web application, demonstrating best practices in backend development, 
-                        frontend design, and user authentication.
-                    </p>
-                    <p class="card-text">
-                        Key features include:
-                    </p>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> User Authentication</li>
-                        <li class="mb-2"><i class="bi bi-search text-primary me-2"></i> Live Search</li>
-                        <li class="mb-2"><i class="bi bi-pencil text-primary me-2"></i> CRUD Operations</li>
-                        <li class="mb-2"><i class="bi bi-phone text-primary me-2"></i> Responsive Design</li>
-                        <li class="mb-2"><i class="bi bi-lightning text-primary me-2"></i> AJAX Interactions</li>
-                        <li class="mb-2"><i class="bi bi-check2-all text-primary me-2"></i> Form Validation</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="row mt-5">
-        <!-- Main Content -->
         <div class="col-lg-8">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold">
-                    <i class="bi bi-newspaper text-primary"></i> Latest Posts
+                <h2 class="fw-bold text-white">
+                    <i class="bi bi-newspaper"></i> Latest Posts
                 </h2>
                 {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('main.create_post') }}" class="btn btn-primary">
+                    <a href="{{ url_for('main.create_post') }}" class="btn btn-gradient btn-sm">
                         <i class="bi bi-plus"></i> New Post
                     </a>
                 {% endif %}
             </div>
 
-            <!-- Posts Section -->
             {% if posts.items %}
                 {% for post in posts.items %}
-                    <article class="card post-card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h3 class="card-title mb-0">
-                                    <a href="{{ url_for('main.view_post', id=post.id) }}" class="text-decoration-none text-dark">
-                                        {{ post.title }}
-                                    </a>
-                                </h3>
-                                {% if post.is_published %}
-                                    <span class="badge bg-success">Published</span>
-                                {% else %}
-                                    <span class="badge bg-secondary">Draft</span>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="post-meta mb-3">
-                                <small>
-                                    <i class="bi bi-person"></i> By {{ post.author.get_full_name() }}
-                                    <span class="mx-2">•</span>
-                                    <i class="bi bi-calendar"></i> {{ post.created_at.strftime('%B %d, %Y') }}
-                                    {% if post.updated_at and post.updated_at != post.created_at %}
-                                        <span class="mx-2">•</span>
-                                        <i class="bi bi-pencil"></i> Updated {{ post.updated_at.strftime('%B %d, %Y') }}
-                                    {% endif %}
-                                </small>
-                            </div>
-                            
-                            <div class="post-content">
-                                {% set content_preview = post.content[:300] + '...' if post.content|length > 300 else post.content %}
-                                <p class="card-text">{{ content_preview }}</p>
-                            </div>
-                            
-                            <div class="d-flex justify-content-between align-items-center">
-                                <a href="{{ url_for('main.view_post', id=post.id) }}" class="btn btn-outline-primary">
-                                    <i class="bi bi-eye"></i> Read More
+                    <div class="post-card animate-fade-in">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h3 class="post-title">
+                                <a href="{{ url_for('main.view_post', id=post.id) }}" class="text-decoration-none">
+                                    {{ post.title }}
                                 </a>
-                                
-                                {% if current_user.is_authenticated and (current_user.id == post.user_id or current_user.is_admin) %}
-                                    <div class="btn-group">
-                                        <a href="{{ url_for('main.edit_post', id=post.id) }}" class="btn btn-sm btn-outline-secondary">
-                                            <i class="bi bi-pencil"></i> Edit
-                                        </a>
-                                        <a href="{{ url_for('main.delete_post', id=post.id) }}" 
-                                           class="btn btn-sm btn-outline-danger delete-post-btn"
-                                           data-post-title="{{ post.title }}">
-                                            <i class="bi bi-trash"></i> Delete
-                                        </a>
-                                    </div>
-                                {% endif %}
-                            </div>
+                            </h3>
+                            {% if post.is_published %}
+                                <span class="badge-modern badge-success">
+                                    <i class="bi bi-check-circle"></i> Published
+                                </span>
+                            {% else %}
+                                <span class="badge-modern" style="background: rgba(100, 116, 139, 0.1); color: #64748b;">
+                                    <i class="bi bi-pencil"></i> Draft
+                                </span>
+                            {% endif %}
                         </div>
-                    </article>
+                        
+                        <div class="post-meta">
+                            <span><i class="bi bi-person-circle"></i> {{ post.author.get_full_name() }}</span>
+                            <span><i class="bi bi-calendar3"></i> {{ post.created_at.strftime('%B %d, %Y') }}</span>
+                            {% if post.updated_at and post.updated_at != post.created_at %}
+                                <span><i class="bi bi-pencil"></i> Updated {{ post.updated_at.strftime('%B %d, %Y') }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <p class="text-muted mb-3">
+                            {% set content_preview = post.content[:250] + '...' if post.content|length > 250 else post.content %}
+                            {{ content_preview }}
+                        </p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ url_for('main.view_post', id=post.id) }}" class="btn btn-gradient btn-sm">
+                                <i class="bi bi-arrow-right"></i> Read More
+                            </a>
+                            
+                            {% if current_user.is_authenticated and (current_user.id == post.user_id or current_user.is_admin) %}
+                                <div class="btn-group">
+                                    <a href="{{ url_for('main.edit_post', id=post.id) }}" class="btn btn-sm" style="background: rgba(99, 102, 241, 0.1); color: var(--primary); border: none;">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <a href="{{ url_for('main.delete_post', id=post.id) }}" 
+                                       class="btn btn-sm delete-post-btn"
+                                       style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border: none;"
+                                       data-post-title="{{ post.title }}">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
                 {% endfor %}
 
-                <!-- Pagination -->
                 {% if posts.pages > 1 %}
                     <nav aria-label="Posts pagination" class="mt-4">
                         <ul class="pagination justify-content-center">
@@ -159,7 +139,7 @@
                     <h3>No posts yet</h3>
                     <p>Be the first to share something interesting!</p>
                     {% if current_user.is_authenticated %}
-                        <a href="{{ url_for('main.create_post') }}" class="btn btn-primary">
+                        <a href="{{ url_for('main.create_post') }}" class="btn btn-gradient">
                             <i class="bi bi-plus-circle"></i> Create Your First Post
                         </a>
                     {% endif %}
@@ -167,100 +147,56 @@
             {% endif %}
         </div>
 
-        <!-- Sidebar -->
         <div class="col-lg-4">
-            <div class="sticky-top">
-                <!-- Welcome Card -->
-                <div class="card sidebar-card">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <i class="bi bi-info-circle text-primary"></i> About blogpost
-                        </h5>
+            <div class="sticky-top" style="top: 100px;">
+                <div class="sidebar-card">
+                    <div class="sidebar-header">
+                        <i class="bi bi-info-circle"></i> About ProApp
                     </div>
-                    <div class="card-body">
-                        <p class="card-text">
-                            This is a dynamic and feature-rich blogging platform built with Flask and Python. 
-                            It serves as a comprehensive example of a full-stack web application, demonstrating best practices in backend development, 
-                            frontend design, and user authentication.
+                    <div class="card-body-modern">
+                        <p class="text-muted mb-3">
+                            A modern, feature-rich blogging platform built with Flask and Python. 
+                            Demonstrating best practices in full-stack development.
                         </p>
-                        <p class="card-text">
-                            Key features include:
-                        </p>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> User Authentication</li>
-                            <li class="mb-2"><i class="bi bi-search text-primary me-2"></i> Live Search</li>
-                            <li class="mb-2"><i class="bi bi-pencil text-primary me-2"></i> CRUD Operations</li>
-                            <li class="mb-2"><i class="bi bi-phone text-primary me-2"></i> Responsive Design</li>
-                            <li class="mb-2"><i class="bi bi-lightning text-primary me-2"></i> AJAX Interactions</li>
-                            <li class="mb-2"><i class="bi bi-check2-all text-primary me-2"></i> Form Validation</li>
+                        <ul class="feature-list">
+                            <li><i class="bi bi-shield-check"></i> User Authentication</li>
+                            <li><i class="bi bi-search"></i> Live Search</li>
+                            <li><i class="bi bi-pencil-square"></i> Modern Editor</li>
+                            <li><i class="bi bi-device-hub"></i> Real-time Updates</li>
+                            <li><i class="bi bi-phone"></i> Mobile Responsive</li>
+                            <li><i class="bi bi-lightning-charge"></i> Fast Performance</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Features Card -->
-                <div class="card sidebar-card">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <i class="bi bi-star text-warning"></i> Features
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-unstyled">
-                            <li class="mb-2">
-                                <i class="bi bi-shield-check text-primary me-2"></i> User Authentication
-                            </li>
-                            <li class="mb-2">
-                                <i class="bi bi-search text-primary me-2"></i> Live Search
-                            </li>
-                            <li class="mb-2">
-                                <i class="bi bi-pencil text-primary me-2"></i> CRUD Operations
-                            </li>
-                            <li class="mb-2">
-                                <i class="bi bi-phone text-primary me-2"></i> Responsive Design
-                            </li>
-                            <li class="mb-2">
-                                <i class="bi bi-lightning text-primary me-2"></i> AJAX Interactions
-                            </li>
-                            <li class="mb-2">
-                                <i class="bi bi-check2-all text-primary me-2"></i> Form Validation
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
                 {% if current_user.is_authenticated %}
-                    <div class="card sidebar-card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="bi bi-lightning text-info"></i> Quick Actions
-                            </h5>
+                    <div class="sidebar-card">
+                        <div class="sidebar-header">
+                            <i class="bi bi-lightning-charge"></i> Quick Actions
                         </div>
-                        <div class="card-body">
+                        <div class="card-body-modern">
                             <div class="d-grid gap-2">
-                                <a href="{{ url_for('main.create_post') }}" class="btn btn-primary">
+                                <a href="{{ url_for('main.create_post') }}" class="btn btn-gradient">
                                     <i class="bi bi-plus-circle"></i> Create Post
                                 </a>
-                                <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-primary">
+                                <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-gradient">
                                     <i class="bi bi-speedometer2"></i> My Dashboard
                                 </a>
                             </div>
                         </div>
                     </div>
                 {% else %}
-                    <div class="card sidebar-card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="bi bi-person-plus text-warning"></i> Join Us
-                            </h5>
+                    <div class="sidebar-card">
+                        <div class="sidebar-header">
+                            <i class="bi bi-person-plus"></i> Join Us
                         </div>
-                        <div class="card-body">
-                            <p class="card-text">Join our community to create and share your own posts!</p>
+                        <div class="card-body-modern">
+                            <p class="text-muted mb-3">Join our community to create and share your own posts!</p>
                             <div class="d-grid gap-2">
-                                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">
+                                <a href="{{ url_for('auth.register') }}" class="btn btn-gradient">
                                     <i class="bi bi-person-plus"></i> Sign Up
                                 </a>
-                                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary">
+                                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-gradient">
                                     <i class="bi bi-box-arrow-in-right"></i> Sign In
                                 </a>
                             </div>
@@ -271,4 +207,4 @@
         </div>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}

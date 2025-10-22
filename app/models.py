@@ -13,7 +13,6 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     
-    # Enhanced profile fields
     bio = db.Column(db.Text)
     location = db.Column(db.String(100))
     website = db.Column(db.String(200))
@@ -21,56 +20,44 @@ class User(UserMixin, db.Model):
     github_handle = db.Column(db.String(50))
     linkedin_handle = db.Column(db.String(50))
     
-    # Account management
     is_active = db.Column(db.Boolean, default=True)
     is_verified = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
     email_notifications = db.Column(db.Boolean, default=True)
     
-    # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     last_login = db.Column(db.DateTime)
     last_active = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # Relationships
     posts = db.relationship('Post', backref='author', lazy=True, cascade='all, delete-orphan')
     comments = db.relationship('Comment', backref='author', lazy=True, cascade='all, delete-orphan')
     
     def set_password(self, password):
-        """Hash and set password"""
         self.password_hash = generate_password_hash(password)
     
     def check_password(self, password):
-        """Check if provided password matches hash"""
         return check_password_hash(self.password_hash, password)
     
     def get_full_name(self):
-        """Return full name"""
         return f"{self.first_name} {self.last_name}"
     
     def get_display_name(self):
-        """Return display name (username or full name)"""
         return self.get_full_name() if self.first_name and self.last_name else self.username
     
     def get_initials(self):
-        """Return user initials for avatar"""
         return f"{self.first_name[0].upper()}{self.last_name[0].upper()}" if self.first_name and self.last_name else self.username[0].upper()
     
     def get_post_count(self):
-        """Get published post count"""
         return Post.query.filter_by(user_id=self.id, is_published=True).count()
     
     def get_comment_count(self):
-        """Get total comment count"""
         return Comment.query.filter_by(user_id=self.id).count()
     
     def update_last_active(self):
-        """Update last active timestamp"""
         self.last_active = datetime.utcnow()
         db.session.commit()
     
     def to_dict(self):
-        """Convert user to dictionary for JSON responses"""
         return {
             'id': self.id,
             'username': self.username,
@@ -101,18 +88,15 @@ class Category(db.Model):
     name = db.Column(db.String(80), unique=True, nullable=False)
     description = db.Column(db.Text)
     slug = db.Column(db.String(100), unique=True, nullable=False, index=True)
-    color = db.Column(db.String(7), default='#6c757d')  # Hex color code
+    color = db.Column(db.String(7), default='#6c757d')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # Relationships
     posts = db.relationship('Post', backref='category', lazy=True)
     
     def get_post_count(self):
-        """Get published post count in this category"""
         return Post.query.filter_by(category_id=self.id, is_published=True).count()
     
     def to_dict(self):
-        """Convert category to dictionary for JSON responses"""
         return {
             'id': self.id,
             'name': self.name,
@@ -132,67 +116,54 @@ class Post(db.Model):
     title = db.Column(db.String(200), nullable=False)
     slug = db.Column(db.String(250), unique=True, nullable=False, index=True)
     content = db.Column(db.Text, nullable=False)
-    excerpt = db.Column(db.String(500))  # Short description
+    excerpt = db.Column(db.String(500))
     
-    # Content metadata
-    reading_time = db.Column(db.Integer, default=0)  # Estimated reading time in minutes
+    reading_time = db.Column(db.Integer, default=0)
     word_count = db.Column(db.Integer, default=0)
     
-    # Status and visibility
     is_published = db.Column(db.Boolean, default=True)
     is_featured = db.Column(db.Boolean, default=False)
     allow_comments = db.Column(db.Boolean, default=True)
     
-    # SEO fields
     meta_description = db.Column(db.String(160))
     meta_keywords = db.Column(db.String(255))
     
-    # Engagement metrics
     view_count = db.Column(db.Integer, default=0)
     like_count = db.Column(db.Integer, default=0)
     
-    # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     published_at = db.Column(db.DateTime)
     
-    # Foreign keys
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     
-    # Relationships
     comments = db.relationship('Comment', backref='post', lazy=True, cascade='all, delete-orphan')
     
     def generate_slug(self):
-        """Generate URL-friendly slug from title"""
         import re
         slug = re.sub(r'[^\w\s-]', '', self.title.lower())
         slug = re.sub(r'[-\s]+', '-', slug)
         return slug.strip('-')
     
     def calculate_reading_time(self):
-        """Calculate estimated reading time (200 words per minute)"""
         word_count = len(self.content.split())
         self.word_count = word_count
         self.reading_time = max(1, round(word_count / 200))
     
     def generate_excerpt(self, length=150):
-        """Generate excerpt from content"""
         if len(self.content) <= length:
             return self.content
         return self.content[:length].rsplit(' ', 1)[0] + '...'
     
     def increment_views(self):
-        """Increment view count"""
         self.view_count += 1
         db.session.commit()
     
     def get_comment_count(self):
-        """Get comment count"""
         return Comment.query.filter_by(post_id=self.id).count()
     
     def to_dict(self):
-        """Convert post to dictionary for JSON responses"""
         return {
             'id': self.id,
             'title': self.title,
@@ -227,20 +198,16 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
     is_approved = db.Column(db.Boolean, default=True)
     
-    # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    # Foreign keys
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-    parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'))  # For threaded comments
+    parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
     
-    # Relationships
     replies = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]), lazy=True)
     
     def to_dict(self):
-        """Convert comment to dictionary for JSON responses"""
         return {
             'id': self.id,
             'content': self.content,

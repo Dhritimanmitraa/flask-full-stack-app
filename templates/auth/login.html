@@ -1,111 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-        <div class="card auth-card">
-            <div class="card-header auth-header">
-                <h3 class="mb-0 py-3">
-                    <i class="bi bi-box-arrow-in-right"></i> Sign In
-                </h3>
+<div class="row justify-content-center my-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card-modern animate-fade-in">
+            <div class="card-header-modern">
+                <i class="bi bi-box-arrow-in-right"></i> Sign In
             </div>
-            <div class="card-body p-4">
+            <div class="card-body-modern">
                 <form method="POST" id="loginForm">
                     {{ form.hidden_tag() }}
                     
-                    <!-- Username Field -->
                     <div class="form-floating mb-3">
-                        {{ form.username(class="form-control") }}
+                        {{ form.username(class="form-control", style="border-radius: 0.75rem; border: 2px solid var(--border);") }}
                         {{ form.username.label(class="form-label") }}
-                        <div class="field-validation"></div>
                         {% if form.username.errors %}
-                            <div class="invalid-feedback d-block">
+                            <div class="text-danger small mt-1">
                                 {{ form.username.errors[0] }}
                             </div>
                         {% endif %}
                     </div>
 
-                    <!-- Password Field -->
                     <div class="form-floating mb-3">
-                        {{ form.password(class="form-control") }}
+                        {{ form.password(class="form-control", style="border-radius: 0.75rem; border: 2px solid var(--border);") }}
                         {{ form.password.label(class="form-label") }}
-                        <div class="field-validation"></div>
                         {% if form.password.errors %}
-                            <div class="invalid-feedback d-block">
+                            <div class="text-danger small mt-1">
                                 {{ form.password.errors[0] }}
                             </div>
                         {% endif %}
                     </div>
 
-                    <!-- Remember Me -->
-                    <div class="form-check mb-3">
+                    <div class="form-check mb-4">
                         {{ form.remember_me(class="form-check-input") }}
                         {{ form.remember_me.label(class="form-check-label") }}
                     </div>
 
-                    <!-- Submit Button -->
                     <div class="d-grid">
-                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                        {{ form.submit(class="btn btn-gradient") }}
                     </div>
                 </form>
 
-                <!-- Divider -->
                 <hr class="my-4">
 
-                <!-- Additional Options -->
                 <div class="text-center">
-                    <p class="mb-0">Don't have an account?</p>
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary mt-2">
+                    <p class="text-muted mb-2">Don't have an account?</p>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-gradient">
                         <i class="bi bi-person-plus"></i> Create Account
                     </a>
                 </div>
             </div>
         </div>
-
-        <!-- Demo Credentials Info -->
-        <div class="card mt-3">
-            <div class="card-body">
-                <h6 class="card-title">
-                    <i class="bi bi-info-circle text-primary"></i> Demo Information
-                </h6>
-                <p class="card-text small text-muted mb-0">
-                    This is a demo application. You can create a new account or use any existing credentials.
-                </p>
-            </div>
-        </div>
     </div>
 </div>
 {% endblock %}
-
-{% block scripts %}
-<script>
-$(document).ready(function() {
-    // Enhanced form validation
-    $('#username, #password').on('input', function() {
-        const $field = $(this);
-        $field.removeClass('is-invalid is-valid');
-        $field.siblings('.field-validation').empty();
-    });
-
-    // Form submission with loading state
-    $('#loginForm').on('submit', function(e) {
-        const $form = $(this);
-        const $button = $form.find('button[type="submit"]');
-        const originalText = $button.text();
-        
-        // Show loading state
-        $button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Signing in...');
-        
-        // Re-enable button if form validation fails
-        setTimeout(function() {
-            if ($form.find('.is-invalid').length > 0) {
-                $button.prop('disabled', false).text(originalText);
-            }
-        }, 100);
-    });
-
-    // Auto-focus on username field
-    $('#username').focus();
-});
-</script>
-{% endblock %} 

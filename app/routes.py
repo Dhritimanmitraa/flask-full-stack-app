@@ -7,13 +7,11 @@ from app.forms import (LoginForm, RegistrationForm, PostForm, SearchForm,
                       UserProfileForm, CommentForm, CategoryForm, ChangePasswordForm)
 from urllib.parse import urlparse
 
-# Create blueprints
 main_bp = Blueprint('main', __name__)
 auth_bp = Blueprint('auth', __name__)
 api_bp = Blueprint('api', __name__)
 admin_bp = Blueprint('admin', __name__)
 
-# ===== MAIN ROUTES =====
 @main_bp.route('/')
 @main_bp.route('/index')
 def index():
@@ -21,19 +19,15 @@ def index():
     page = request.args.get('page', 1, type=int)
     category_id = request.args.get('category', 0, type=int)
     
-    # Build query
     query = Post.query.filter_by(is_published=True)
     if category_id:
         query = query.filter_by(category_id=category_id)
     
-    # Featured posts for hero section
     featured_posts = Post.query.filter_by(is_published=True, is_featured=True).limit(3).all()
     
-    # Regular posts with pagination
     posts = query.order_by(Post.created_at.desc()).paginate(
         page=page, per_page=5, error_out=False)
     
-    # Categories for sidebar
     categories = Category.query.order_by(Category.name).all()
     
     search_form = SearchForm()
@@ -50,7 +44,6 @@ def dashboard():
         Post.created_at.desc()).paginate(
         page=page, per_page=10, error_out=False)
     
-    # Analytics data
     total_posts = Post.query.filter_by(user_id=current_user.id).count()
     published_posts = Post.query.filter_by(user_id=current_user.id, is_published=True).count()
     draft_posts = total_posts - published_posts
@@ -80,17 +73,15 @@ def create_post():
             meta_description=form.meta_description.data,
             meta_keywords=form.meta_keywords.data,
             is_published=form.is_published.data,
-            is_featured=form.is_featured.data and current_user.is_admin,  # Only admins can feature posts
+            is_featured=form.is_featured.data and current_user.is_admin,
             allow_comments=form.allow_comments.data,
             user_id=current_user.id,
             category_id=form.category_id.data if form.category_id.data else None
         )
         
-        # Generate slug and calculate reading time
         post.slug = post.generate_slug()
         post.calculate_reading_time()
         
-        # Set published date if publishing
         if post.is_published:
             post.published_at = datetime.utcnow()
         
@@ -120,11 +111,9 @@ def edit_post(id):
         post.category_id = form.category_id.data if form.category_id.data else None
         post.updated_at = datetime.utcnow()
         
-        # Update slug and reading time
         post.slug = post.generate_slug()
         post.calculate_reading_time()
         
-        # Set published date if publishing for the first time
         if post.is_published and not post.published_at:
             post.published_at = datetime.utcnow()
         
@@ -149,13 +138,11 @@ def edit_post(id):
 def delete_post(id):
     """Delete a post (author or admin)"""
     post = Post.query.get_or_404(id)
-    # Only the author or an admin can delete
     if post.user_id != current_user.id and not current_user.is_admin:
         abort(403)
     db.session.delete(post)
     db.session.commit()
     flash('Your post has been deleted!', 'success')
-    # Redirect back to the page the user came from, or dashboard as fallback
     next_url = request.referrer or url_for('main.dashboard')
     return redirect(next_url)
 
@@ -168,16 +155,12 @@ def view_post(slug=None, id=None):
     else:
         post = Post.query.filter_by(id=id, is_published=True).first_or_404()
     
-    # Increment view count (basic analytics)
     post.increment_views()
     
-    # Get comments
     comments = Comment.query.filter_by(post_id=post.id, is_approved=True).order_by(Comment.created_at.desc()).all()
     
-    # Comment form
     comment_form = CommentForm()
     
-    # Related posts
     related_posts = Post.query.filter(
         Post.id != post.id,
         Post.is_published == True,
@@ -273,7 +256,6 @@ def change_password():
     
     return render_template('user/change_password.html', title='Change Password', form=form)
 
-# ===== AUTHENTICATION ROUTES =====
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     """User login"""
@@ -330,7 +312,6 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('main.index'))
 
-# ===== API ROUTES =====
 @api_bp.route('/search')
 def search():
     """Enhanced search API endpoint"""
@@ -438,12 +419,10 @@ def validate_email():
 def like_post(id):
     """Like/unlike a post"""
     post = Post.query.get_or_404(id)
-    # Simple like system (in production, you'd want a separate likes table)
     post.like_count += 1
     db.session.commit()
     return jsonify({'likes': post.like_count})
 
-# ===== ADMIN ROUTES =====
 @admin_bp.route('/categories')
 @login_required
 def manage_categories():
@@ -480,7 +459,6 @@ def create_category():
     
     return render_template('admin/category_form.html', title='Create Category', form=form)
 
-# ===== ERROR HANDLERS =====
 @main_bp.app_errorhandler(404)
 def not_found_error(error):
     """404 error handler"""
