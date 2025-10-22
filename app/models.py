@@ -128,9 +128,11 @@ class Post(db.Model):
     meta_description = db.Column(db.String(160))
     meta_keywords = db.Column(db.String(255))
     
-    # Media fields
-    image_filename = db.Column(db.String(255))
-    video_filename = db.Column(db.String(255))
+    # Media fields (support both file uploads and URLs)
+    image_filename = db.Column(db.String(255))  # For uploaded files
+    video_filename = db.Column(db.String(255))  # For uploaded files
+    image_url = db.Column(db.String(500))  # For external URLs
+    video_url = db.Column(db.String(500))  # For external URLs
     
     view_count = db.Column(db.Integer, default=0)
     like_count = db.Column(db.Integer, default=0)

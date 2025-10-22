@@ -114,15 +114,21 @@ def create_post():
     """Enhanced post creation with categories and SEO"""
     form = PostForm()
     if form.validate_on_submit():
-        # Handle image upload
+        # Handle image (upload or URL)
         image_filename = None
+        image_url = None
         if form.image.data:
             image_filename = save_uploaded_file(form.image.data, 'images')
+        elif form.image_url.data:
+            image_url = form.image_url.data
         
-        # Handle video upload
+        # Handle video (upload or URL)
         video_filename = None
+        video_url = None
         if form.video.data:
             video_filename = save_uploaded_file(form.video.data, 'videos')
+        elif form.video_url.data:
+            video_url = form.video_url.data
         
         post = Post(
             title=form.title.data,
@@ -136,7 +142,9 @@ def create_post():
             user_id=current_user.id,
             category_id=form.category_id.data if form.category_id.data else None,
             image_filename=image_filename,
-            video_filename=video_filename
+            video_filename=video_filename,
+            image_url=image_url,
+            video_url=video_url
         )
         
         post.slug = post.generate_slug()
@@ -160,21 +168,29 @@ def edit_post(id):
     form = PostForm()
     
     if form.validate_on_submit():
-        # Handle image upload/replacement
+        # Handle image (upload or URL)
         if form.image.data:
             # Delete old image if exists
             if post.image_filename:
                 delete_uploaded_file(post.image_filename, 'images')
             # Save new image
             post.image_filename = save_uploaded_file(form.image.data, 'images')
+            post.image_url = None  # Clear URL if uploading file
+        elif form.image_url.data:
+            post.image_url = form.image_url.data
+            post.image_filename = None  # Clear filename if using URL
         
-        # Handle video upload/replacement
+        # Handle video (upload or URL)
         if form.video.data:
             # Delete old video if exists
             if post.video_filename:
                 delete_uploaded_file(post.video_filename, 'videos')
             # Save new video
             post.video_filename = save_uploaded_file(form.video.data, 'videos')
+            post.video_url = None  # Clear URL if uploading file
+        elif form.video_url.data:
+            post.video_url = form.video_url.data
+            post.video_filename = None  # Clear filename if using URL
         
         post.title = form.title.data
         post.content = form.content.data

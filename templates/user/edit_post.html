@@ -54,7 +54,7 @@
                                     </div>
                                 {% endif %}
                                 <div class="form-text">
-                                    <small class="text-muted">Upload a featured image (JPG, PNG, GIF, WebP)</small>
+                                    <small class="text-muted">Upload (Local dev only)</small>
                                 </div>
                                 {% if post.image_filename %}
                                 <div class="mt-2">
@@ -64,10 +64,30 @@
                                          class="img-thumbnail" 
                                          style="max-width: 200px; max-height: 200px;">
                                 </div>
+                                {% elif post.image_url %}
+                                <div class="mt-2">
+                                    <p class="small text-muted mb-1">Current image:</p>
+                                    <img src="{{ post.image_url }}" 
+                                         alt="Current image" 
+                                         class="img-thumbnail" 
+                                         style="max-width: 200px; max-height: 200px;">
+                                </div>
                                 {% endif %}
                                 <div id="imagePreview" class="mt-2" style="display: none;">
                                     <p class="small text-success mb-1">New image preview:</p>
                                     <img id="imagePreviewImg" src="" alt="Preview" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                {{ form.image_url.label(class="form-label") }}
+                                {{ form.image_url(class="form-control") }}
+                                {% if form.image_url.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.image_url.errors[0] }}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    <small class="text-muted">Or paste URL (Vercel)</small>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +101,7 @@
                                     </div>
                                 {% endif %}
                                 <div class="form-text">
-                                    <small class="text-muted">Upload a featured video (MP4, MOV, AVI, WebM)</small>
+                                    <small class="text-muted">Upload (Local dev only)</small>
                                 </div>
                                 {% if post.video_filename %}
                                 <div class="mt-2">
@@ -90,10 +110,29 @@
                                         <source src="{{ url_for('main.serve_upload', folder='videos', filename=post.video_filename) }}" type="video/mp4">
                                     </video>
                                 </div>
+                                {% elif post.video_url %}
+                                <div class="mt-2">
+                                    <p class="small text-muted mb-1">Current video:</p>
+                                    <video controls class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                        <source src="{{ post.video_url }}" type="video/mp4">
+                                    </video>
+                                </div>
                                 {% endif %}
                                 <div id="videoPreview" class="mt-2" style="display: none;">
                                     <p class="small text-success mb-1">New video preview:</p>
                                     <video id="videoPreviewVideo" controls class="img-thumbnail" style="max-width: 200px; max-height: 200px;"></video>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                {{ form.video_url.label(class="form-label") }}
+                                {{ form.video_url(class="form-control") }}
+                                {% if form.video_url.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.video_url.errors[0] }}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    <small class="text-muted">Or paste URL (Vercel)</small>
                                 </div>
                             </div>
                         </div>

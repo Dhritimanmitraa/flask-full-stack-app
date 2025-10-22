@@ -96,15 +96,25 @@ class PostForm(FlaskForm):
     ], render_kw={'placeholder': 'SEO keywords separated by commas (optional)', 'class': 'form-control'})
     
     # Media upload fields
-    image = FileField('Featured Image', validators=[
+    image = FileField('Featured Image (Upload)', validators=[
         Optional(),
         FileAllowed(['jpg', 'jpeg', 'png', 'gif', 'webp'], 'Only image files are allowed!')
     ], render_kw={'class': 'form-control', 'accept': 'image/*'})
     
-    video = FileField('Featured Video', validators=[
+    image_url = URLField('Or Image URL', validators=[
+        Optional(),
+        URL(message='Please enter a valid URL')
+    ], render_kw={'class': 'form-control', 'placeholder': 'https://example.com/image.jpg'})
+    
+    video = FileField('Featured Video (Upload)', validators=[
         Optional(),
         FileAllowed(['mp4', 'mov', 'avi', 'webm', 'mkv'], 'Only video files are allowed!')
     ], render_kw={'class': 'form-control', 'accept': 'video/*'})
+    
+    video_url = URLField('Or Video URL', validators=[
+        Optional(),
+        URL(message='Please enter a valid URL')
+    ], render_kw={'class': 'form-control', 'placeholder': 'https://example.com/video.mp4'})
     
     is_published = BooleanField('Publish Post', default=True, render_kw={'class': 'form-check-input'})
     is_featured = BooleanField('Featured Post', default=False, render_kw={'class': 'form-check-input'})

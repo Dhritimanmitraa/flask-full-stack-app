@@ -51,6 +51,26 @@ with app.app_context():
                 except Exception as e:
                     print(f"[MIGRATION] Error adding video_filename: {e}")
                     db.session.rollback()
+            
+            # Add image_url column if it doesn't exist
+            if 'image_url' not in columns:
+                try:
+                    db.session.execute(text("ALTER TABLE post ADD COLUMN image_url VARCHAR(500)"))
+                    db.session.commit()
+                    print("[MIGRATION] Added image_url column")
+                except Exception as e:
+                    print(f"[MIGRATION] Error adding image_url: {e}")
+                    db.session.rollback()
+            
+            # Add video_url column if it doesn't exist
+            if 'video_url' not in columns:
+                try:
+                    db.session.execute(text("ALTER TABLE post ADD COLUMN video_url VARCHAR(500)"))
+                    db.session.commit()
+                    print("[MIGRATION] Added video_url column")
+                except Exception as e:
+                    print(f"[MIGRATION] Error adding video_url: {e}")
+                    db.session.rollback()
     except Exception as e:
         print(f"[MIGRATION] Migration error: {e}")
 

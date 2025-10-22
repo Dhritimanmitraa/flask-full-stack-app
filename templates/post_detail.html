@@ -45,12 +45,26 @@
                          class="img-fluid rounded shadow-sm"
                          style="max-height: 500px; width: 100%; object-fit: cover;">
                 </div>
+                {% elif post.image_url %}
+                <div class="post-media mb-4">
+                    <img src="{{ post.image_url }}" 
+                         alt="{{ post.title }}" 
+                         class="img-fluid rounded shadow-sm"
+                         style="max-height: 500px; width: 100%; object-fit: cover;">
+                </div>
                 {% endif %}
                 
                 {% if post.video_filename %}
                 <div class="post-media mb-4">
                     <video controls class="w-100 rounded shadow-sm" style="max-height: 500px;">
                         <source src="{{ url_for('main.serve_upload', folder='videos', filename=post.video_filename) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                {% elif post.video_url %}
+                <div class="post-media mb-4">
+                    <video controls class="w-100 rounded shadow-sm" style="max-height: 500px;">
+                        <source src="{{ post.video_url }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
