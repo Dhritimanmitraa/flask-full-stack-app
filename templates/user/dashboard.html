@@ -8,7 +8,8 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h1 class="h2 text-gradient mb-1">Dashboard</h1>
-                    <p class="text-muted">Welcome back, {{ current_user.get_display_name() }}! Here's what's happening with your content.</p>
+                    <p class="text-muted">Welcome back, {{ current_user.get_display_name() }}! Here's what's happening
+                        with your content.</p>
                 </div>
                 <div>
                     <a href="{{ url_for('main.create_post') }}" class="btn btn-primary hover-lift">
@@ -32,9 +33,10 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-3 mb-3">
-            <div class="card stats-card text-white h-100 animate-slide-up" style="animation-delay: 0.1s; background: var(--gradient-success);">
+            <div class="card stats-card text-white h-100 animate-slide-up"
+                style="animation-delay: 0.1s; background: var(--gradient-success);">
                 <div class="card-body text-center">
                     <div class="stats-number">{{ analytics.published_posts }}</div>
                     <div class="stats-label">Published</div>
@@ -44,9 +46,10 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-3 mb-3">
-            <div class="card stats-card text-white h-100 animate-slide-up" style="animation-delay: 0.2s; background: var(--gradient-secondary);">
+            <div class="card stats-card text-white h-100 animate-slide-up"
+                style="animation-delay: 0.2s; background: var(--gradient-secondary);">
                 <div class="card-body text-center">
                     <div class="stats-number">{{ analytics.total_views }}</div>
                     <div class="stats-label">Total Views</div>
@@ -56,9 +59,10 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-3 mb-3">
-            <div class="card stats-card text-white h-100 animate-slide-up" style="animation-delay: 0.3s; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);">
+            <div class="card stats-card text-white h-100 animate-slide-up"
+                style="animation-delay: 0.3s; background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);">
                 <div class="card-body text-center">
                     <div class="stats-number">{{ analytics.total_comments }}</div>
                     <div class="stats-label">Comments</div>
@@ -90,14 +94,15 @@
                         <a href="{{ url_for('main.change_password') }}" class="btn btn-outline-warning hover-scale">
                             <i class="bi bi-shield-lock me-2"></i>Change Password
                         </a>
-                        <a href="{{ url_for('main.user_profile', username=current_user.username) }}" class="btn btn-outline-info hover-scale">
+                        <a href="{{ url_for('main.user_profile', username=current_user.username) }}"
+                            class="btn btn-outline-info hover-scale">
                             <i class="bi bi-person me-2"></i>View Public Profile
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-8">
             <div class="card h-100">
                 <div class="card-header">
@@ -110,13 +115,16 @@
                         <div class="col-md-6">
                             <div class="border-start border-primary ps-3 mb-3">
                                 <h6 class="text-primary mb-1">Account Information</h6>
-                                <p class="mb-1"><strong>Member since:</strong> {{ current_user.created_at.strftime('%B %Y') }}</p>
-                                <p class="mb-1"><strong>Last active:</strong> {{ current_user.last_active.strftime('%Y-%m-%d %H:%M') if current_user.last_active else 'N/A' }}</p>
-                                <p class="mb-0"><strong>Profile:</strong> 
+                                <p class="mb-1"><strong>Member since:</strong> {{ current_user.created_at.strftime('%B
+                                    %Y') }}</p>
+                                <p class="mb-1"><strong>Last active:</strong> {{
+                                    current_user.last_active.strftime('%Y-%m-%d %H:%M') if current_user.last_active else
+                                    'N/A' }}</p>
+                                <p class="mb-0"><strong>Profile:</strong>
                                     {% if current_user.bio %}
-                                        <span class="badge bg-success">Complete</span>
+                                    <span class="badge bg-success">Complete</span>
                                     {% else %}
-                                        <span class="badge bg-warning">Incomplete</span>
+                                    <span class="badge bg-warning">Incomplete</span>
                                     {% endif %}
                                 </p>
                             </div>
@@ -125,18 +133,18 @@
                             <div class="border-start border-info ps-3">
                                 <h6 class="text-info mb-1">Content Statistics</h6>
                                 <p class="mb-1"><strong>Drafts:</strong> {{ analytics.draft_posts }}</p>
-                                <p class="mb-1"><strong>Average views per post:</strong> 
+                                <p class="mb-1"><strong>Average views per post:</strong>
                                     {% if analytics.published_posts > 0 %}
-                                        {{ "%.1f"|format(analytics.total_views / analytics.published_posts) }}
+                                    {{ "%.1f"|format(analytics.total_views / analytics.published_posts) }}
                                     {% else %}
-                                        0
+                                    0
                                     {% endif %}
                                 </p>
                                 <p class="mb-0"><strong>Engagement rate:</strong>
                                     {% if analytics.total_views > 0 %}
-                                        {{ "%.1f"|format((analytics.total_comments / analytics.total_views) * 100) }}%
+                                    {{ "%.1f"|format((analytics.total_comments / analytics.total_views) * 100) }}%
                                     {% else %}
-                                        0%
+                                    0%
                                     {% endif %}
                                 </p>
                             </div>
@@ -159,10 +167,10 @@
                         <div class="btn-group" role="group">
                             <input type="radio" class="btn-check" name="filter" id="all" checked>
                             <label class="btn btn-outline-primary btn-sm" for="all">All</label>
-                            
+
                             <input type="radio" class="btn-check" name="filter" id="published">
                             <label class="btn btn-outline-success btn-sm" for="published">Published</label>
-                            
+
                             <input type="radio" class="btn-check" name="filter" id="drafts">
                             <label class="btn btn-outline-warning btn-sm" for="drafts">Drafts</label>
                         </div>
@@ -170,146 +178,148 @@
                 </div>
                 <div class="card-body p-0">
                     {% if posts.items %}
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Status</th>
-                                        <th>Category</th>
-                                        <th class="text-center">Views</th>
-                                        <th class="text-center">Comments</th>
-                                        <th>Updated</th>
-                                        <th class="text-end">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for post in posts.items %}
-                                    <tr class="post-row" data-status="{{ 'published' if post.is_published else 'draft' }}">
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                {% if post.is_featured %}
-                                                    <i class="bi bi-star-fill text-warning me-2" title="Featured Post"></i>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                    <th>Category</th>
+                                    <th class="text-center">Views</th>
+                                    <th class="text-center">Comments</th>
+                                    <th>Updated</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for post in posts.items %}
+                                <tr class="post-row" data-status="{{ 'published' if post.is_published else 'draft' }}">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if post.is_featured %}
+                                            <i class="bi bi-star-fill text-warning me-2" title="Featured Post"></i>
+                                            {% endif %}
+                                            <div>
+                                                <h6 class="mb-1">{{ post.title }}</h6>
+                                                {% if post.excerpt %}
+                                                <small class="text-muted">{{ post.excerpt[:50] }}...</small>
                                                 {% endif %}
-                                                <div>
-                                                    <h6 class="mb-1">{{ post.title }}</h6>
-                                                    {% if post.excerpt %}
-                                                        <small class="text-muted">{{ post.excerpt[:50] }}...</small>
-                                                    {% endif %}
-                                                </div>
                                             </div>
-                                        </td>
-                                        <td>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if post.is_published %}
+                                        <span class="badge bg-success rounded-pill">
+                                            <i class="bi bi-check-circle me-1"></i>Published
+                                        </span>
+                                        {% else %}
+                                        <span class="badge bg-warning rounded-pill">
+                                            <i class="bi bi-pencil me-1"></i>Draft
+                                        </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if post.category %}
+                                        <span class="badge category-badge"
+                                            style="background-color: {{ post.category.color }};">
+                                            {{ post.category.name }}
+                                        </span>
+                                        {% else %}
+                                        <span class="text-muted">No category</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-light text-dark">
+                                            <i class="bi bi-eye me-1"></i>{{ post.view_count }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-light text-dark">
+                                            <i class="bi bi-chat me-1"></i>{{ post.get_comment_count() }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">
+                                            {{ post.updated_at.strftime('%Y-%m-%d') }}
+                                            <br>
+                                            <span style="font-size: 0.75em;">{{ post.updated_at.strftime('%H:%M')
+                                                }}</span>
+                                        </small>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="btn-group btn-group-sm">
                                             {% if post.is_published %}
-                                                <span class="badge bg-success rounded-pill">
-                                                    <i class="bi bi-check-circle me-1"></i>Published
-                                                </span>
-                                            {% else %}
-                                                <span class="badge bg-warning rounded-pill">
-                                                    <i class="bi bi-pencil me-1"></i>Draft
-                                                </span>
+                                            <a href="{{ url_for('main.view_post', id=post.id) }}"
+                                                class="btn btn-outline-primary" title="View Post">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
                                             {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if post.category %}
-                                                <span class="badge category-badge" style="background-color: {{ post.category.color }};">
-                                                    {{ post.category.name }}
-                                                </span>
-                                            {% else %}
-                                                <span class="text-muted">No category</span>
-                                            {% endif %}
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge bg-light text-dark">
-                                                <i class="bi bi-eye me-1"></i>{{ post.view_count }}
-                                            </span>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge bg-light text-dark">
-                                                <i class="bi bi-chat me-1"></i>{{ post.get_comment_count() }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <small class="text-muted">
-                                                {{ post.updated_at.strftime('%Y-%m-%d') }}
-                                                <br>
-                                                <span style="font-size: 0.75em;">{{ post.updated_at.strftime('%H:%M') }}</span>
-                                            </small>
-                                        </td>
-                                        <td class="text-end">
-                                            <div class="btn-group btn-group-sm">
-                                                {% if post.is_published %}
-                                                    <a href="{{ url_for('main.view_post', id=post.id) }}" 
-                                                       class="btn btn-outline-primary" title="View Post">
-                                                        <i class="bi bi-eye"></i>
-                                                    </a>
-                                                {% endif %}
-                                                <a href="{{ url_for('main.edit_post', id=post.id) }}" 
-                                                   class="btn btn-outline-secondary" title="Edit Post">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                <button type="button" class="btn btn-outline-danger delete-btn" 
-                                                        data-post-id="{{ post.id }}" 
-                                                        data-post-title="{{ post.title }}" 
-                                                        title="Delete Post">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                                            <a href="{{ url_for('main.edit_post', id=post.id) }}"
+                                                class="btn btn-outline-secondary" title="Edit Post">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-outline-danger delete-btn"
+                                                data-post-id="{{ post.id }}" data-post-title="{{ post.title }}"
+                                                title="Delete Post">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                     {% else %}
-                        <div class="text-center py-5">
-                            <i class="bi bi-journal-plus display-1 text-muted"></i>
-                            <h5 class="mt-3 text-muted">No posts yet</h5>
-                            <p class="text-muted">Start creating your first post to see it here.</p>
-                            <a href="{{ url_for('main.create_post') }}" class="btn btn-primary">
-                                <i class="bi bi-plus-circle me-2"></i>Create Your First Post
-                            </a>
-                        </div>
+                    <div class="text-center py-5">
+                        <i class="bi bi-journal-plus display-1 text-muted"></i>
+                        <h5 class="mt-3 text-muted">No posts yet</h5>
+                        <p class="text-muted">Start creating your first post to see it here.</p>
+                        <a href="{{ url_for('main.create_post') }}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-2"></i>Create Your First Post
+                        </a>
+                    </div>
                     {% endif %}
                 </div>
-                
+
                 <!-- Pagination -->
                 {% if posts.pages > 1 %}
                 <div class="card-footer">
                     <nav aria-label="Posts pagination">
                         <ul class="pagination justify-content-center mb-0">
                             {% if posts.has_prev %}
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ url_for('main.dashboard', page=posts.prev_num) }}">
-                                        <i class="bi bi-chevron-left"></i>
-                                    </a>
-                                </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('main.dashboard', page=posts.prev_num) }}">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
                             {% endif %}
-                            
+
                             {% for page_num in posts.iter_pages() %}
-                                {% if page_num %}
-                                    {% if page_num != posts.page %}
-                                        <li class="page-item">
-                                            <a class="page-link" href="{{ url_for('main.dashboard', page=page_num) }}">{{ page_num }}</a>
-                                        </li>
-                                    {% else %}
-                                        <li class="page-item active">
-                                            <span class="page-link">{{ page_num }}</span>
-                                        </li>
-                                    {% endif %}
-                                {% else %}
-                                    <li class="page-item disabled">
-                                        <span class="page-link">...</span>
-                                    </li>
-                                {% endif %}
+                            {% if page_num %}
+                            {% if page_num != posts.page %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('main.dashboard', page=page_num) }}">{{ page_num
+                                    }}</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ page_num }}</span>
+                            </li>
+                            {% endif %}
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                            {% endif %}
                             {% endfor %}
-                            
+
                             {% if posts.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ url_for('main.dashboard', page=posts.next_num) }}">
-                                        <i class="bi bi-chevron-right"></i>
-                                    </a>
-                                </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('main.dashboard', page=posts.next_num) }}">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
                             {% endif %}
                         </ul>
                     </nav>
@@ -330,7 +340,8 @@
             </div>
             <div class="modal-body">
                 <p>Are you sure you want to delete the post "<span id="postTitle"></span>"?</p>
-                <p class="text-danger"><small><i class="bi bi-exclamation-triangle me-1"></i>This action cannot be undone.</small></p>
+                <p class="text-danger"><small><i class="bi bi-exclamation-triangle me-1"></i>This action cannot be
+                        undone.</small></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -348,39 +359,39 @@
 
 {% block scripts %}
 <script>
-$(document).ready(function() {
-    // Post filtering
-    $('input[name="filter"]').change(function() {
-        const filter = $(this).attr('id');
-        $('.post-row').each(function() {
-            const status = $(this).data('status');
-            if (filter === 'all' || 
-                (filter === 'published' && status === 'published') ||
-                (filter === 'drafts' && status === 'draft')) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
+    $(document).ready(function () {
+        // Post filtering
+        $('input[name="filter"]').change(function () {
+            const filter = $(this).attr('id');
+            $('.post-row').each(function () {
+                const status = $(this).data('status');
+                if (filter === 'all' ||
+                    (filter === 'published' && status === 'published') ||
+                    (filter === 'drafts' && status === 'draft')) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+
+        // Delete button click handler
+        $(document).on('click', '.delete-btn', function () {
+            const postId = $(this).data('post-id');
+            const postTitle = $(this).data('post-title');
+            confirmDelete(postId, postTitle);
+        });
+
+        // Animate stats cards on load
+        $('.stats-card').each(function (index) {
+            $(this).css('animation-delay', (index * 0.1) + 's');
         });
     });
-    
-    // Delete button click handler
-    $(document).on('click', '.delete-btn', function() {
-        const postId = $(this).data('post-id');
-        const postTitle = $(this).data('post-title');
-        confirmDelete(postId, postTitle);
-    });
-    
-    // Animate stats cards on load
-    $('.stats-card').each(function(index) {
-        $(this).css('animation-delay', (index * 0.1) + 's');
-    });
-});
 
-function confirmDelete(postId, postTitle) {
-    $('#postTitle').text(postTitle);
-    $('#deleteForm').attr('action', '/delete_post/' + postId);
-    $('#deleteModal').modal('show');
-}
+    function confirmDelete(postId, postTitle) {
+        $('#postTitle').text(postTitle);
+        $('#deleteForm').attr('action', '/delete_post/' + postId);
+        $('#deleteModal').modal('show');
+    }
 </script>
-{% endblock %} 
+{% endblock %}

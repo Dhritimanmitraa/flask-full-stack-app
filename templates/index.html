@@ -15,7 +15,7 @@
                     <div class="decoration dots-1"></div>
                     <div class="decoration bowl"></div>
                 </div>
-                
+
                 <!-- Right side decorations -->
                 <div class="decoration-group right-decorations">
                     <div class="decoration rolling-pin" data-animation="float"></div>
@@ -24,897 +24,930 @@
                     <div class="decoration dots-2"></div>
                 </div>
             </div>
-            
+
             <!-- Hero Text -->
             <div class="hero-text animate-fade-in">
                 <h1 class="hero-main-title">Publish your passions, your way</h1>
                 <p class="hero-subtitle">Create a unique and beautiful blog easily.</p>
-                
-        {% if not current_user.is_authenticated %}
-                    <a href="{{ url_for('auth.register') }}" class="btn-hero-primary">
-                        CREATE YOUR BLOG
-                    </a>
+
+                {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.register') }}" class="btn-hero-primary">
+                    CREATE YOUR BLOG
+                </a>
                 {% else %}
-                    <a href="{{ url_for('main.create_post') }}" class="btn-hero-primary">
-                        CREATE YOUR BLOG
-                    </a>
+                <a href="{{ url_for('main.create_post') }}" class="btn-hero-primary">
+                    CREATE YOUR BLOG
+                </a>
                 {% endif %}
             </div>
-            
+
             <!-- Featured Blog Post Card -->
             {% if posts.items %}
-                {% set featured_post = posts.items[0] %}
-                <div class="featured-blog-card animate-slide-up">
-                    <div class="blog-card-header">
-                        <h3 class="blog-card-title">{{ featured_post.title }}</h3>
-                    </div>
-                    <div class="blog-card-meta">
-                        <span class="blog-date">
-                            <i class="bi bi-calendar3"></i> {{ featured_post.created_at.strftime('%A, %d %B') }}
-                        </span>
-                        <span class="blog-author">
-                            <i class="bi bi-person"></i> {{ featured_post.author.get_full_name() }}
-                        </span>
-                    </div>
-                    {% if featured_post.image_filename %}
-                    <div class="blog-card-image">
-                        <img src="{{ url_for('main.serve_upload', folder='images', filename=featured_post.image_filename) }}" 
-                             alt="{{ featured_post.title }}">
-                    </div>
-                    {% elif featured_post.image_url %}
-                    <div class="blog-card-image">
-                        <img src="{{ featured_post.image_url }}" alt="{{ featured_post.title }}">
-            </div>
-        {% else %}
-                    <div class="blog-card-image-placeholder">
-                        <i class="bi bi-image"></i>
-                    </div>
-                    {% endif %}
-                    <div class="blog-card-excerpt">
-                        {{ featured_post.content[:200] }}{% if featured_post.content|length > 200 %}...{% endif %}
-                    </div>
-                    <a href="{{ url_for('main.view_post', id=featured_post.id) }}" class="blog-card-link">
-                        Read More <i class="bi bi-arrow-right"></i>
+            {% set featured_post = posts.items[0] %}
+            <div class="featured-blog-card animate-slide-up">
+                <div class="blog-card-header">
+                    <h3 class="blog-card-title">{{ featured_post.title }}</h3>
+                </div>
+                <div class="blog-card-meta">
+                    <span class="blog-date">
+                        <i class="bi bi-calendar3"></i> {{ featured_post.created_at.strftime('%A, %d %B') }}
+                    </span>
+                    <span class="blog-author">
+                        <i class="bi bi-person"></i> {{ featured_post.author.get_full_name() }}
+                    </span>
+                </div>
+                {% if featured_post.image_filename %}
+                <div class="blog-card-image">
+                    <img src="{{ url_for('main.serve_upload', folder='images', filename=featured_post.image_filename) }}"
+                        alt="{{ featured_post.title }}">
+                </div>
+                {% elif featured_post.image_url %}
+                <div class="blog-card-image">
+                    <img src="{{ featured_post.image_url }}" alt="{{ featured_post.title }}">
+                </div>
+                {% else %}
+                <div class="blog-card-image-placeholder">
+                    <i class="bi bi-image"></i>
+                </div>
+                {% endif %}
+                <div class="blog-card-excerpt">
+                    {{ featured_post.content[:200] }}{% if featured_post.content|length > 200 %}...{% endif %}
+                </div>
+                <a href="{{ url_for('main.view_post', id=featured_post.id) }}" class="blog-card-link">
+                    Read More <i class="bi bi-arrow-right"></i>
                 </a>
             </div>
-        {% endif %}
+            {% endif %}
         </div>
     </div>
-    </div>
+</div>
 
 <!-- Posts Grid Section -->
 <div class="container mt-5 pt-5">
     <div class="section-header">
         <h2 class="section-title">
-                    <i class="bi bi-newspaper"></i> Latest Posts
-                </h2>
-                {% if current_user.is_authenticated %}
-            <a href="{{ url_for('main.create_post') }}" class="btn-create-post">
-                <i class="bi bi-plus-circle"></i> New Post
+            <i class="bi bi-newspaper"></i> Latest Posts
+        </h2>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('main.create_post') }}" class="btn-create-post">
+            <i class="bi bi-plus-circle"></i> New Post
+        </a>
+        {% endif %}
+    </div>
+
+    {% if posts.items %}
+    <div class="posts-grid">
+        {% for post in posts.items %}
+        <div class="post-card-modern animate-fade-in" data-animation-delay="{{ loop.index * 0.1 }}">
+            {% if post.image_filename %}
+            <div class="post-card-image">
+                <img src="{{ url_for('main.serve_upload', folder='images', filename=post.image_filename) }}"
+                    alt="{{ post.title }}">
+            </div>
+            {% elif post.image_url %}
+            <div class="post-card-image">
+                <img src="{{ post.image_url }}" alt="{{ post.title }}">
+            </div>
+            {% endif %}
+
+            <div class="post-card-content">
+                <div class="post-card-meta-top">
+                    <span class="post-author">
+                        <i class="bi bi-person-circle"></i> {{ post.author.get_full_name() }}
+                    </span>
+                    <span class="post-date">
+                        <i class="bi bi-calendar3"></i> {{ post.created_at.strftime('%b %d, %Y') }}
+                    </span>
+                </div>
+
+                <h3 class="post-card-title">
+                    <a href="{{ url_for('main.view_post', id=post.id) }}">{{ post.title }}</a>
+                </h3>
+
+                <p class="post-card-excerpt">
+                    {{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}
+                </p>
+
+                <div class="post-card-footer">
+                    <a href="{{ url_for('main.view_post', id=post.id) }}" class="btn-read-more">
+                        Read More <i class="bi bi-arrow-right"></i>
                     </a>
-                {% endif %}
-            </div>
 
-            {% if posts.items %}
-        <div class="posts-grid">
-                {% for post in posts.items %}
-                <div class="post-card-modern animate-fade-in" data-animation-delay="{{ loop.index * 0.1 }}">
-                    {% if post.image_filename %}
-                    <div class="post-card-image">
-                        <img src="{{ url_for('main.serve_upload', folder='images', filename=post.image_filename) }}" 
-                             alt="{{ post.title }}">
-                    </div>
-                    {% elif post.image_url %}
-                    <div class="post-card-image">
-                        <img src="{{ post.image_url }}" alt="{{ post.title }}">
-                    </div>
-                    {% endif %}
-                    
-                    <div class="post-card-content">
-                        <div class="post-card-meta-top">
-                            <span class="post-author">
-                                <i class="bi bi-person-circle"></i> {{ post.author.get_full_name() }}
-                                </span>
-                            <span class="post-date">
-                                <i class="bi bi-calendar3"></i> {{ post.created_at.strftime('%b %d, %Y') }}
-                                </span>
-                        </div>
-                        
-                        <h3 class="post-card-title">
-                            <a href="{{ url_for('main.view_post', id=post.id) }}">{{ post.title }}</a>
-                        </h3>
-                        
-                        <p class="post-card-excerpt">
-                            {{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}
-                        </p>
-                        
-                        <div class="post-card-footer">
-                            <a href="{{ url_for('main.view_post', id=post.id) }}" class="btn-read-more">
-                                Read More <i class="bi bi-arrow-right"></i>
-                            </a>
-                            
-                            {% if current_user.is_authenticated and (current_user.id == post.user_id or current_user.is_admin) %}
-                                <div class="post-actions">
-                                    <a href="{{ url_for('main.edit_post', id=post.id) }}" class="btn-action edit" title="Edit">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <a href="{{ url_for('main.delete_post', id=post.id) }}" 
-                                       class="btn-action delete delete-post-btn" 
-                                       title="Delete"
-                                       data-post-title="{{ post.title }}">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
-                                </div>
-                            {% endif %}
-                        </div>
-                        </div>
-                    </div>
-                {% endfor %}
-        </div>
-
-                {% if posts.pages > 1 %}
-            <nav aria-label="Posts pagination" class="pagination-wrapper">
-                <ul class="pagination-modern">
-                            {% if posts.has_prev %}
-                        <li class="page-item-modern">
-                            <a class="page-link-modern" href="{{ url_for('main.index', page=posts.prev_num) }}">
-                                        <i class="bi bi-chevron-left"></i> Previous
-                                    </a>
-                                </li>
-                            {% endif %}
-                            
-                            {% for page_num in posts.iter_pages() %}
-                                {% if page_num %}
-                                    {% if page_num != posts.page %}
-                                <li class="page-item-modern">
-                                    <a class="page-link-modern" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
-                                        </li>
-                                    {% else %}
-                                <li class="page-item-modern active">
-                                    <span class="page-link-modern">{{ page_num }}</span>
-                                        </li>
-                                    {% endif %}
-                                {% else %}
-                            <li class="page-item-modern disabled">
-                                <span class="page-link-modern">...</span>
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
-                            
-                            {% if posts.has_next %}
-                        <li class="page-item-modern">
-                            <a class="page-link-modern" href="{{ url_for('main.index', page=posts.next_num) }}">
-                                        Next <i class="bi bi-chevron-right"></i>
-                                    </a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                {% endif %}
-            {% else %}
-                <div class="empty-state">
-            <div class="empty-state-icon">
-                    <i class="bi bi-journal-x"></i>
-            </div>
-                    <h3>No posts yet</h3>
-                    <p>Be the first to share something interesting!</p>
-                    {% if current_user.is_authenticated %}
-                <a href="{{ url_for('main.create_post') }}" class="btn-hero-primary">
-                            <i class="bi bi-plus-circle"></i> Create Your First Post
+                    {% if current_user.is_authenticated and (current_user.id == post.user_id or current_user.is_admin)
+                    %}
+                    <div class="post-actions">
+                        <a href="{{ url_for('main.edit_post', id=post.id) }}" class="btn-action edit" title="Edit">
+                            <i class="bi bi-pencil"></i>
                         </a>
+                        <a href="{{ url_for('main.delete_post', id=post.id) }}"
+                            class="btn-action delete delete-post-btn" title="Delete" data-post-title="{{ post.title }}">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
                     {% endif %}
                 </div>
-            {% endif %}
+            </div>
         </div>
+        {% endfor %}
+    </div>
+
+    {% if posts.pages > 1 %}
+    <nav aria-label="Posts pagination" class="pagination-wrapper">
+        <ul class="pagination-modern">
+            {% if posts.has_prev %}
+            <li class="page-item-modern">
+                <a class="page-link-modern" href="{{ url_for('main.index', page=posts.prev_num) }}">
+                    <i class="bi bi-chevron-left"></i> Previous
+                </a>
+            </li>
+            {% endif %}
+
+            {% for page_num in posts.iter_pages() %}
+            {% if page_num %}
+            {% if page_num != posts.page %}
+            <li class="page-item-modern">
+                <a class="page-link-modern" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+            </li>
+            {% else %}
+            <li class="page-item-modern active">
+                <span class="page-link-modern">{{ page_num }}</span>
+            </li>
+            {% endif %}
+            {% else %}
+            <li class="page-item-modern disabled">
+                <span class="page-link-modern">...</span>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if posts.has_next %}
+            <li class="page-item-modern">
+                <a class="page-link-modern" href="{{ url_for('main.index', page=posts.next_num) }}">
+                    Next <i class="bi bi-chevron-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="bi bi-journal-x"></i>
+        </div>
+        <h3>No posts yet</h3>
+        <p>Be the first to share something interesting!</p>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('main.create_post') }}" class="btn-hero-primary">
+            <i class="bi bi-plus-circle"></i> Create Your First Post
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
 
 <style>
-/* Blogger-Style Hero Section */
-.blogger-hero-section {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-    min-height: 90vh;
-    position: relative;
-    overflow: hidden;
-    padding: 80px 0;
-    margin-top: -20px;
-}
-
-.hero-content-wrapper {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
-}
-
-/* Decorative Elements */
-.decorative-elements {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.decoration-group {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
-.left-decorations {
-    left: 0;
-}
-
-.right-decorations {
-    right: 0;
-}
-
-.decoration {
-    position: absolute;
-    opacity: 0.8;
-}
-
-/* Spoon Decoration */
-.spoon {
-    left: 5%;
-    bottom: 15%;
-    width: 120px;
-    height: 120px;
-    background: #ffa8b0;
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    transform: rotate(-25deg);
-}
-
-.spoon::before {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 80px;
-    background: #ffa8b0;
-    left: 50%;
-    top: -70px;
-    transform: translateX(-50%);
-    border-radius: 10px;
-}
-
-/* Whisk Decoration */
-.whisk {
-    left: 8%;
-    bottom: 25%;
-    width: 60px;
-    height: 100px;
-    background: white;
-    border-radius: 50%;
-    transform: rotate(15deg);
-}
-
-.whisk::before {
-    content: '';
-    position: absolute;
-    width: 40px;
-    height: 20px;
-    background: white;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 0 0 20px 20px;
-}
-
-/* Cherries */
-.cherries {
-    left: 12%;
-    bottom: 40%;
-    width: 30px;
-    height: 30px;
-    background: #d32f2f;
-    border-radius: 50%;
-}
-
-.cherries::before {
-    content: '';
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    background: #d32f2f;
-    border-radius: 50%;
-    left: 25px;
-    top: 5px;
-}
-
-.cherries::after {
-    content: '';
-    position: absolute;
-    width: 3px;
-    height: 20px;
-    background: #c62828;
-    top: -20px;
-    left: 15px;
-    border-radius: 2px;
-}
-
-/* Dots */
-.dots-1 {
-    left: 15%;
-    bottom: 50%;
-    width: 8px;
-    height: 8px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 15px 10px 0 white, 25px 20px 0 white, 10px 25px 0 white;
-}
-
-.dots-2 {
-    right: 12%;
-    top: 50%;
-    width: 8px;
-    height: 8px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: -15px 10px 0 white, -25px 20px 0 white, -10px 25px 0 white;
-}
-
-/* Bowl */
-.bowl {
-    left: 3%;
-    bottom: 5%;
-    width: 100px;
-    height: 40px;
-    background: #8d6e63;
-    border-radius: 50%;
-    border: 8px solid #8d6e63;
-}
-
-.bowl::before {
-    content: '';
-    position: absolute;
-    width: 60px;
-    height: 50px;
-    background: #ffc1cc;
-    border-radius: 50%;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-/* Rolling Pin */
-.rolling-pin {
-    right: 8%;
-    top: 20%;
-    width: 20px;
-    height: 120px;
-    background: #ffa8b0;
-    border-radius: 10px;
-    transform: rotate(45deg);
-}
-
-.rolling-pin::before,
-.rolling-pin::after {
-    content: '';
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    background: #ffa8b0;
-    border-radius: 50%;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.rolling-pin::before {
-    top: -10px;
-}
-
-.rolling-pin::after {
-    bottom: -10px;
-}
-
-/* Measuring Cup */
-.measuring-cup {
-    right: 12%;
-    top: 35%;
-    width: 50px;
-    height: 70px;
-    background: #ffa8b0;
-    border-radius: 5px;
-    transform: rotate(-20deg);
-}
-
-.measuring-cup::before {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 8px;
-    background: #ffa8b0;
-    top: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 5px;
-}
-
-/* Pie */
-.pie {
-    right: 5%;
-    bottom: 15%;
-    width: 100px;
-    height: 100px;
-    background: #ffa8b0;
-    border-radius: 50%;
-    overflow: hidden;
-}
-
-.pie::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(
-        45deg,
-        #fff 0px,
-        #fff 10px,
-        transparent 10px,
-        transparent 20px
-    );
-    opacity: 0.3;
-}
-
-/* Hero Text */
-.hero-text {
-    text-align: center;
-    color: white;
-    z-index: 3;
-}
-
-.hero-main-title {
-    font-size: 3.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-}
-
-.hero-subtitle {
-    font-size: 1.3rem;
-    margin-bottom: 2rem;
-    opacity: 0.95;
-}
-
-.btn-hero-primary {
-    display: inline-block;
-    padding: 15px 40px;
-    background: #ff6b35;
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-radius: 5px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-}
-
-.btn-hero-primary:hover {
-    background: #ff5722;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    color: white;
-}
-
-/* Featured Blog Card */
-.featured-blog-card {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
-    max-width: 600px;
-    width: 100%;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    z-index: 3;
-}
-
-.blog-card-header {
-    margin-bottom: 15px;
-}
-
-.blog-card-title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #333;
-    margin: 0;
-}
-
-.blog-card-meta {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-    font-size: 0.9rem;
-    color: #666;
-}
-
-.blog-card-image,
-.blog-card-image-placeholder {
-    width: 100%;
-    height: 250px;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 20px;
-    background: #f5f5f5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.blog-card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.blog-card-image-placeholder i {
-    font-size: 4rem;
-    color: #ccc;
-}
-
-.blog-card-excerpt {
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-.blog-card-link {
-    color: #ff6b35;
-    text-decoration: none;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    transition: gap 0.3s ease;
-}
-
-.blog-card-link:hover {
-    gap: 10px;
-    color: #ff5722;
-}
-
-/* Section Header */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
-}
-
-.section-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #333;
-}
-
-.btn-create-post {
-    padding: 10px 25px;
-    background: #ff6b35;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.btn-create-post:hover {
-    background: #ff5722;
-    transform: translateY(-2px);
-    color: white;
-}
-
-/* Posts Grid */
-.posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 30px;
-    margin-bottom: 50px;
-}
-
-.post-card-modern {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-
-.post-card-modern:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-}
-
-.post-card-image {
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-    background: #f5f5f5;
-}
-
-.post-card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.post-card-modern:hover .post-card-image img {
-    transform: scale(1.05);
-}
-
-.post-card-content {
-    padding: 25px;
-}
-
-.post-card-meta-top {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 15px;
-    font-size: 0.85rem;
-    color: #666;
-}
-
-.post-card-title {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 15px;
-}
-
-.post-card-title a {
-    color: #333;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.post-card-title a:hover {
-    color: #ff6b35;
-}
-
-.post-card-excerpt {
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-.post-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.btn-read-more {
-    color: #ff6b35;
-    text-decoration: none;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    transition: gap 0.3s ease;
-}
-
-.btn-read-more:hover {
-    gap: 10px;
-    color: #ff5722;
-}
-
-.post-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.btn-action {
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-action.edit {
-    background: rgba(99, 102, 241, 0.1);
-    color: #6366f1;
-}
-
-.btn-action.edit:hover {
-    background: #6366f1;
-    color: white;
-}
-
-.btn-action.delete {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-}
-
-.btn-action.delete:hover {
-    background: #ef4444;
-    color: white;
-}
-
-/* Pagination */
-.pagination-wrapper {
-    margin-top: 50px;
-    display: flex;
-    justify-content: center;
-}
-
-.pagination-modern {
-    display: flex;
-    gap: 10px;
-    list-style: none;
-    padding: 0;
-}
-
-.page-item-modern {
-    margin: 0;
-}
-
-.page-link-modern {
-    padding: 10px 20px;
-    background: white;
-    color: #333;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.page-link-modern:hover {
-    background: #ff6b35;
-    color: white;
-    border-color: #ff6b35;
-}
-
-.page-item-modern.active .page-link-modern {
-    background: #ff6b35;
-    color: white;
-    border-color: #ff6b35;
-}
-
-.page-item-modern.disabled .page-link-modern {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Empty State */
-.empty-state {
-    text-align: center;
-    padding: 80px 20px;
-}
-
-.empty-state-icon {
-    font-size: 5rem;
-    color: #ccc;
-    margin-bottom: 20px;
-}
-
-.empty-state h3 {
-    font-size: 1.8rem;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.empty-state p {
-    color: #666;
-    font-size: 1.1rem;
-    margin-bottom: 30px;
-}
-
-/* Animations */
-@keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(-25deg); }
-    50% { transform: translateY(-20px) rotate(-25deg); }
-}
-
-@keyframes float-delay {
-    0%, 100% { transform: translateY(0px) rotate(15deg); }
-    50% { transform: translateY(-20px) rotate(15deg); }
-}
-
-@keyframes bounce {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
-}
-
-@keyframes rotate {
-    0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(180deg); }
-}
-
-[data-animation="float"] {
-    animation: float 3s ease-in-out infinite;
-}
-
-[data-animation="float-delay"] {
-    animation: float-delay 3s ease-in-out infinite 0.5s;
-}
-
-[data-animation="bounce"] {
-    animation: bounce 2s ease-in-out infinite;
-}
-
-[data-animation="rotate"] {
-    animation: rotate 4s linear infinite;
-}
-
-.animate-fade-in {
-    animation: fadeIn 1s ease-in;
-}
-
-.animate-slide-up {
-    animation: slideUp 0.8s ease-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideUp {
-    from { 
-        opacity: 0;
-        transform: translateY(50px);
+    /* Blogger-Style Hero Section */
+    .blogger-hero-section {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+        min-height: 85vh;
+        position: relative;
+        overflow: hidden;
+        padding: 100px 0 80px;
+        margin-top: -20px;
     }
-    to { 
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .hero-main-title {
-        font-size: 2.5rem;
-    }
-    
-    .hero-subtitle {
-        font-size: 1.1rem;
-    }
-    
-    .posts-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .decorative-elements {
-        display: none;
-    }
-    
-    .section-header {
+    .hero-content-wrapper {
+        position: relative;
+        z-index: 2;
+        display: flex;
         flex-direction: column;
-        gap: 20px;
-        align-items: flex-start;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
     }
-}
 
-@media (max-width: 480px) {
+    /* Decorative Elements */
+    .decorative-elements {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .decoration-group {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    .left-decorations {
+        left: 0;
+    }
+
+    .right-decorations {
+        right: 0;
+    }
+
+    .decoration {
+        position: absolute;
+        opacity: 0.8;
+    }
+
+    /* Spoon Decoration */
+    .spoon {
+        left: 5%;
+        bottom: 15%;
+        width: 120px;
+        height: 120px;
+        background: #ffa8b0;
+        border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        transform: rotate(-25deg);
+    }
+
+    .spoon::before {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 80px;
+        background: #ffa8b0;
+        left: 50%;
+        top: -70px;
+        transform: translateX(-50%);
+        border-radius: 10px;
+    }
+
+    /* Whisk Decoration */
+    .whisk {
+        left: 8%;
+        bottom: 25%;
+        width: 60px;
+        height: 100px;
+        background: white;
+        border-radius: 50%;
+        transform: rotate(15deg);
+    }
+
+    .whisk::before {
+        content: '';
+        position: absolute;
+        width: 40px;
+        height: 20px;
+        background: white;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 0 0 20px 20px;
+    }
+
+    /* Cherries */
+    .cherries {
+        left: 12%;
+        bottom: 40%;
+        width: 30px;
+        height: 30px;
+        background: #d32f2f;
+        border-radius: 50%;
+    }
+
+    .cherries::before {
+        content: '';
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        background: #d32f2f;
+        border-radius: 50%;
+        left: 25px;
+        top: 5px;
+    }
+
+    .cherries::after {
+        content: '';
+        position: absolute;
+        width: 3px;
+        height: 20px;
+        background: #c62828;
+        top: -20px;
+        left: 15px;
+        border-radius: 2px;
+    }
+
+    /* Dots */
+    .dots-1 {
+        left: 15%;
+        bottom: 50%;
+        width: 8px;
+        height: 8px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 15px 10px 0 white, 25px 20px 0 white, 10px 25px 0 white;
+    }
+
+    .dots-2 {
+        right: 12%;
+        top: 50%;
+        width: 8px;
+        height: 8px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: -15px 10px 0 white, -25px 20px 0 white, -10px 25px 0 white;
+    }
+
+    /* Bowl */
+    .bowl {
+        left: 3%;
+        bottom: 5%;
+        width: 100px;
+        height: 40px;
+        background: #8d6e63;
+        border-radius: 50%;
+        border: 8px solid #8d6e63;
+    }
+
+    .bowl::before {
+        content: '';
+        position: absolute;
+        width: 60px;
+        height: 50px;
+        background: #ffc1cc;
+        border-radius: 50%;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* Rolling Pin */
+    .rolling-pin {
+        right: 8%;
+        top: 20%;
+        width: 20px;
+        height: 120px;
+        background: #ffa8b0;
+        border-radius: 10px;
+        transform: rotate(45deg);
+    }
+
+    .rolling-pin::before,
+    .rolling-pin::after {
+        content: '';
+        position: absolute;
+        width: 35px;
+        height: 35px;
+        background: #ffa8b0;
+        border-radius: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .rolling-pin::before {
+        top: -10px;
+    }
+
+    .rolling-pin::after {
+        bottom: -10px;
+    }
+
+    /* Measuring Cup */
+    .measuring-cup {
+        right: 12%;
+        top: 35%;
+        width: 50px;
+        height: 70px;
+        background: #ffa8b0;
+        border-radius: 5px;
+        transform: rotate(-20deg);
+    }
+
+    .measuring-cup::before {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 8px;
+        background: #ffa8b0;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 5px;
+    }
+
+    /* Pie */
+    .pie {
+        right: 5%;
+        bottom: 15%;
+        width: 100px;
+        height: 100px;
+        background: #ffa8b0;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .pie::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(45deg,
+                #fff 0px,
+                #fff 10px,
+                transparent 10px,
+                transparent 20px);
+        opacity: 0.3;
+    }
+
+    /* Hero Text */
+    .hero-text {
+        text-align: center;
+        color: white;
+        z-index: 3;
+    }
+
     .hero-main-title {
-        font-size: 2rem;
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     }
-    
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        opacity: 0.95;
+    }
+
+    .btn-hero-primary {
+        display: inline-block;
+        padding: 16px 42px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-hero-primary:hover {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
+        color: white;
+    }
+
+    /* Featured Blog Card */
     .featured-blog-card {
-        padding: 20px;
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 600px;
+        width: 100%;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        z-index: 3;
     }
-    
+
+    .blog-card-header {
+        margin-bottom: 15px;
+    }
+
     .blog-card-title {
-        font-size: 1.4rem;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
     }
-}
+
+    .blog-card-meta {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .blog-card-image,
+    .blog-card-image-placeholder {
+        width: 100%;
+        height: 250px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 20px;
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .blog-card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .blog-card-image-placeholder i {
+        font-size: 4rem;
+        color: #ccc;
+    }
+
+    .blog-card-excerpt {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .blog-card-link {
+        color: #6366f1;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .blog-card-link:hover {
+        gap: 10px;
+        color: #4f46e5;
+    }
+
+    /* Section Header */
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .btn-create-post {
+        padding: 10px 25px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-create-post:hover {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        transform: translateY(-2px);
+        color: white;
+        box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Posts Grid */
+    .posts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+
+    .post-card-modern {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .post-card-modern:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .post-card-image {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        background: #f5f5f5;
+    }
+
+    .post-card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .post-card-modern:hover .post-card-image img {
+        transform: scale(1.05);
+    }
+
+    .post-card-content {
+        padding: 25px;
+    }
+
+    .post-card-meta-top {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    .post-card-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .post-card-title a {
+        color: #333;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .post-card-title a:hover {
+        color: #6366f1;
+    }
+
+    .post-card-excerpt {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .post-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-read-more {
+        color: #6366f1;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-read-more:hover {
+        gap: 10px;
+        color: #4f46e5;
+    }
+
+    .post-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-action {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-action.edit {
+        background: rgba(99, 102, 241, 0.1);
+        color: #6366f1;
+    }
+
+    .btn-action.edit:hover {
+        background: #6366f1;
+        color: white;
+    }
+
+    .btn-action.delete {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    .btn-action.delete:hover {
+        background: #ef4444;
+        color: white;
+    }
+
+    /* Pagination */
+    .pagination-wrapper {
+        margin-top: 50px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .pagination-modern {
+        display: flex;
+        gap: 10px;
+        list-style: none;
+        padding: 0;
+    }
+
+    .page-item-modern {
+        margin: 0;
+    }
+
+    .page-link-modern {
+        padding: 10px 20px;
+        background: white;
+        color: #333;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .page-link-modern:hover {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border-color: #6366f1;
+    }
+
+    .page-item-modern.active .page-link-modern {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border-color: #6366f1;
+    }
+
+    .page-item-modern.disabled .page-link-modern {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+    }
+
+    .empty-state-icon {
+        font-size: 5rem;
+        color: #ccc;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+    }
+
+    /* Animations */
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0px) rotate(-25deg);
+        }
+
+        50% {
+            transform: translateY(-20px) rotate(-25deg);
+        }
+    }
+
+    @keyframes float-delay {
+
+        0%,
+        100% {
+            transform: translateY(0px) rotate(15deg);
+        }
+
+        50% {
+            transform: translateY(-20px) rotate(15deg);
+        }
+    }
+
+    @keyframes bounce {
+
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-15px);
+        }
+    }
+
+    @keyframes rotate {
+
+        0%,
+        100% {
+            transform: rotate(0deg);
+        }
+
+        50% {
+            transform: rotate(180deg);
+        }
+    }
+
+    [data-animation="float"] {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    [data-animation="float-delay"] {
+        animation: float-delay 3s ease-in-out infinite 0.5s;
+    }
+
+    [data-animation="bounce"] {
+        animation: bounce 2s ease-in-out infinite;
+    }
+
+    [data-animation="rotate"] {
+        animation: rotate 4s linear infinite;
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 1s ease-in;
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero-main-title {
+            font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+        }
+
+        .posts-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .decorative-elements {
+            display: none;
+        }
+
+        .section-header {
+            flex-direction: column;
+            gap: 20px;
+            align-items: flex-start;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-main-title {
+            font-size: 2rem;
+        }
+
+        .featured-blog-card {
+            padding: 20px;
+        }
+
+        .blog-card-title {
+            font-size: 1.4rem;
+        }
+    }
 </style>
 
 <script>
-// Set animation delay from data attribute
-document.addEventListener('DOMContentLoaded', function() {
-    const postCards = document.querySelectorAll('.post-card-modern[data-animation-delay]');
-    postCards.forEach(function(card) {
-        const delay = card.getAttribute('data-animation-delay');
-        card.style.animationDelay = delay + 's';
+    // Set animation delay from data attribute
+    document.addEventListener('DOMContentLoaded', function () {
+        const postCards = document.querySelectorAll('.post-card-modern[data-animation-delay]');
+        postCards.forEach(function (card) {
+            const delay = card.getAttribute('data-animation-delay');
+            card.style.animationDelay = delay + 's';
+        });
     });
-});
 </script>
 {% endblock %}
